@@ -1,0 +1,37 @@
+/bin/
+
+# Application properties (contains sensitive data like API keys, passwords)
+backend/src/main/resources/application.properties
+
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/.cache/
+test-results/
+playwright-report/
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cypress
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+
+# Node
+frontend/node_modules/
+node_modules/
+
+# Java
+backend/target/
+
+# IDE
+.vscode/
+.settings/
+.classpath
+.project

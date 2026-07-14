@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placeholders.css">
+    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+    <link rel="stylesheet" href="../../css/user/feedback.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-fire"></i>
+                <span>Gợi ý sự kiện</span>
+            </a>
+            <a href="tickets.html" class="menu-link">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Vé của tôi</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+            <a href="feedback.html" class="menu-link active">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Feedback</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Thông báo</h3>
+                            <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                                Đánh dấu tất cả đã đọc
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-loading">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+         <!-- Feedback Section -->
+        <section id="feedback-section" class="content-section feedback-theme light" style="display: block;">
+            <div class="survey-wrapper">
+                <div class="survey-card">
+                    <div class="survey-left">
+                        <h2>CHIA SẺ TRẢI NGHIỆM CỦA QUÝ VỊ</h2>
+                        <p class="subtitle">Ý kiến chân thành của bạn là vô giá để sự kiện được hoàn thiện hơn</p>
+                        
+                        <!-- Event Selector -->
+                        <div class="event-selector-feedback">
+                            <label for="eventSelectFeedback" class="label">Chọn sự kiện đã kết thúc:</label>
+                            <select id="eventSelectFeedback" class="event-select-feedback">
+                                <option value="">-- Chọn sự kiện --</option>
+                            </select>
+                            <p class="event-select-hint" id="eventSelectHint" style="display: none; color: #6b7280; font-size: 13px; margin-top: 8px;">
+                                Chỉ có thể đánh giá sự kiện đã kết thúc mà bạn đã tham gia
+                            </p>
+                        </div>
+                        
+                        <p id="eventQuestion" style="display: none; margin-top: 20px;">
+                            Quý vị hài lòng mức độ nào với sự kiện <strong id="selectedEventTitle"></strong>?
+                        </p>
+                        <div class="rating" id="stars" style="display: none;">
+                            <i class="fa-star fa-regular" data-value="1"></i>
+                            <i class="fa-star fa-regular" data-value="2"></i>
+                            <i class="fa-star fa-regular" data-value="3"></i>
+                            <i class="fa-star fa-regular" data-value="4"></i>
+                            <i class="fa-star fa-regular" data-value="5"></i>
+                        </div>
+                        <p id="rate-text" class="rate-text" style="display: none;">Mời bạn đánh giá ⭐</p>
+
+                        <div id="feedbackForm" style="display: none;">
+                            <label for="idea" class="label">Ý Kiến & Đề Xuất (Chi tiết)</label>
+                            <textarea id="idea" rows="4"
+                                placeholder="Mời quý vị chia sẻ suy nghĩ, góp ý chi tiết..."></textarea>
+                            <div class="options">
+                                <div class="col">
+                                    <p>Quý vị ấn tượng nhất với điều gì?</p>
+                                    <label><input type="checkbox" checked> Nội dung Diễn giả</label>
+                                    <label><input type="checkbox"> Mạng lưới kết nối (Networking)</label>
+                                    <label><input type="checkbox"> Địa điểm / Không gian</label>
+                                </div>
+                                <div class="col">
+                                    <p>Quý vị có muốn nhận thông tin sự kiện sắp tới?</p>
+                                    <label><input type="radio" name="sub" checked> Có</label>
+                                    <label><input type="radio" name="sub"> Không</label>
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <input type="text" placeholder="Tên (Tuỳ chọn)">
+                                <input type="email" placeholder="Địa chỉ Email (Tuỳ chọn)">
+                            </div>
+                            <button id="submitBtn" class="btn">GỬI PHẢN HỒI</button>
+                        </div>
+                        
+                        <div id="noEventsMessage" style="display: none; text-align: center; padding: 40px; color: #6b7280;">
+                            <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p style="font-size: 16px; margin-bottom: 8px;">Chưa có sự kiện nào đã kết thúc</p>
+                            <p style="font-size: 14px;">Bạn chỉ có thể đánh giá các sự kiện đã kết thúc mà bạn đã tham gia.</p>
+                        </div>
+                    </div>
+                    <div class="survey-right">
+                        <h3>Feedback của tôi</h3>
+                        <div id="userFeedbacksList" class="user-feedbacks-list">
+                            <div class="loading-placeholder" style="text-align: center; padding: 20px; color: #6b7280;">
+                                <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                            </div>
+                        </div>
+                        <div id="noFeedbacksMessage" style="display: none; text-align: center; padding: 20px; color: #6b7280;">
+                            <i class="fas fa-comments" style="font-size: 32px; margin-bottom: 12px; opacity: 0.5;"></i>
+                            <p style="font-size: 14px;">Bạn chưa có feedback nào</p>
+                            <p style="font-size: 12px; margin-top: 4px;">Hãy đánh giá sự kiện để xem phản hồi từ tổ chức viên</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="toast" class="toast">Cảm ơn bạn đã gửi phản hồi 💙</div>
+        </section>
+    </div>
+    <!-- WebSocket Libraries - Phải load trước websocket.js -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    
+    <!-- Stomp.js với fallback mechanism (thử local trước, sau đó CDN) -->
+    <script>
+        (function() {
+            let loaded = false;
+            const localPath = '../../js/stomp.umd.min.js'; // File đã tải về frontend/js/
+            const cdnSources = [
+                'https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js',
+                'https://unpkg.com/@stomp/stompjs@7/bundles/stomp.umd.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js'
+            ];
+            let currentIndex = -1; // Bắt đầu từ -1 để thử local trước
+            
+            function tryLoadStomp() {
+                if (typeof Stomp !== 'undefined') {
+                    console.log('✅ Stomp đã được load');
+                    loaded = true;
+                    return;
+                }
+                
+                let scriptSrc;
+                
+                // Thử local file trước
+                if (currentIndex === -1) {
+                    scriptSrc = localPath;
+                    console.log('🔄 Thử load Stomp từ local file...');
+                    currentIndex = 0; // Sau khi thử local, bắt đầu từ CDN đầu tiên
+                } else if (currentIndex < cdnSources.length) {
+                    scriptSrc = cdnSources[currentIndex];
+                    console.log('🔄 Đang thử load Stomp từ CDN ' + (currentIndex + 1) + '...');
+                    currentIndex++;
+                } else {
+                    console.error('❌ Tất cả sources đều fail. Vui lòng tải Stomp về local.');
+                    console.error('💡 Tải từ: https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js');
+                    console.error('💡 Lưu vào: frontend/js/libs/stomp.umd.min.js');
+                    console.error('💡 Sau đó refresh trang.');
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = scriptSrc;
+                script.async = false;
+                
+                script.onload = function() {
+                    if (typeof Stomp !== 'undefined') {
+                        console.log('✅ Đã load Stomp từ ' + (currentIndex === 0 ? 'local file' : 'CDN'));
+                        loaded = true;
+                    } else {
+                        console.warn('⚠️ Script đã load nhưng Stomp vẫn undefined, thử tiếp...');
+                        setTimeout(tryLoadStomp, 100);
+                    }
+                };
+                
+                script.onerror = function() {
+                    if (currentIndex === 0) {
+                        console.warn('⚠️ Local file không tồn tại, thử CDN...');
+                    } else {
+                        console.warn('⚠️ CDN failed, thử CDN khác...');
+                    }
+                    setTimeout(tryLoadStomp, 100);
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            // Bắt đầu thử load
+            tryLoadStomp();
+        })();
+    </script>
+    
+    <!-- Core Scripts -->
+    <script src="../../js/core/auth.js"></script>
+    <script src="../../js/core/websocket.js"></script>
+    <script src="../../js/core/notifications.js"></script>
+    <script src="../../js/user/feedback.js"></script>
+    
+    <!-- Đảm bảo WebSocket được khởi tạo sau khi tất cả scripts đã load -->
+    <script>
+        // Kiểm tra và khởi tạo WebSocket sau khi tất cả scripts đã load
+        window.addEventListener('load', function() {
+            console.log('📦 Tất cả resources đã load xong');
+            console.log('  - SockJS:', typeof SockJS !== 'undefined' ? '✅' : '❌');
+            console.log('  - Stomp:', typeof Stomp !== 'undefined' ? '✅' : '❌');
+            console.log('  - initWebSocket:', typeof initWebSocket === 'function' ? '✅' : '❌');
+            
+            // Nếu Stomp/SockJS đã sẵn sàng và initWebSocket chưa được gọi, gọi nó
+            if (typeof SockJS !== 'undefined' && typeof Stomp !== 'undefined' && typeof initWebSocket === 'function') {
+                setTimeout(function() {
+                    console.log('🚀 Khởi tạo WebSocket...');
+                    initWebSocket();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+
+</html>

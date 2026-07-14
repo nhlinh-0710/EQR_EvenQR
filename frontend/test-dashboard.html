@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard - EventHub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+            padding: 20px;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #6366f1;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .success {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #4f46e5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-header">
+            <i class="fas fa-calendar-alt"></i>
+            Dashboard Test - EventHub
+        </h1>
+        
+        <div class="test-section success">
+            <h3><i class="fas fa-check-circle"></i> CSS Loading Test</h3>
+            <p>Nếu bạn thấy text này có style đẹp, CSS đã load thành công!</p>
+        </div>
+        
+        <div class="test-section" id="jsTest">
+            <h3><i class="fas fa-code"></i> JavaScript Test</h3>
+            <p id="jsStatus">Đang kiểm tra JavaScript...</p>
+            <button class="btn" onclick="testFunction()">Test Function</button>
+        </div>
+        
+        <div class="test-section" id="storageTest">
+            <h3><i class="fas fa-database"></i> LocalStorage Test</h3>
+            <p id="storageStatus">Đang kiểm tra LocalStorage...</p>
+            <button class="btn" onclick="testStorage()">Test Storage</button>
+        </div>
+        
+        <div class="test-section">
+            <h3><i class="fas fa-link"></i> Navigation Test</h3>
+            <p>Links to test:</p>
+            <button class="btn" onclick="goToDashboard()">Go to Dashboard</button>
+            <button class="btn" onclick="goToHome()">Go to Home</button>
+        </div>
+        
+        <div class="test-section" id="qrTest">
+            <h3><i class="fas fa-qrcode"></i> QR Code Test</h3>
+            <p id="qrStatus">Đang kiểm tra QR Code library...</p>
+            <div id="testQR" style="margin: 10px 0;"></div>
+            <button class="btn" onclick="testQRCode()">Generate Test QR</button>
+        </div>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="js/user/simple-qr.js"></script>
+    
+    <script>
+        // Test JavaScript functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test dashboard loaded');
+            
+            // Test basic JS
+            document.getElementById('jsStatus').innerHTML = '<span style="color: green;">✓ JavaScript đã load thành công!</span>';
+            document.getElementById('jsTest').classList.add('success');
+            
+            // Test LocalStorage
+            testStorage();
+            
+            // Test QR library
+            setTimeout(testQRCode, 1000);
+        });
+        
+        function testFunction() {
+            alert('JavaScript function hoạt động tốt!');
+        }
+        
+        function testStorage() {
+            try {
+                // Test write
+                localStorage.setItem('test', 'EventHub Test');
+                
+                // Test read
+                const testValue = localStorage.getItem('test');
+                
+                if (testValue === 'EventHub Test') {
+                    document.getElementById('storageStatus').innerHTML = '<span style="color: green;">✓ LocalStorage hoạt động tốt!</span>';
+                    document.getElementById('storageTest').classList.add('success');
+                } else {
+                    throw new Error('Read failed');
+                }
+                
+                // Cleanup
+                localStorage.removeItem('test');
+            } catch (error) {
+                document.getElementById('storageStatus').innerHTML = '<span style="color: red;">✗ LocalStorage lỗi: ' + error.message + '</span>';
+                document.getElementById('storageTest').classList.add('error');
+            }
+        }
+        
+        function testQRCode() {
+            try {
+                const qrContainer = document.getElementById('testQR');
+                
+                if (typeof SimpleQRCode !== 'undefined') {
+                    // Sử dụng SimpleQRCode
+                    SimpleQRCode.generate('EventHub Test QR Code', qrContainer, { size: 150, useAPI: true });
+                    document.getElementById('qrStatus').innerHTML = '<span style="color: green;">✓ SimpleQRCode hoạt động tốt!</span>';
+                    document.getElementById('qrTest').classList.add('success');
+                } else if (typeof qrcode !== 'undefined') {
+                    // Sử dụng qrcode-generator
+                    qrContainer.innerHTML = '';
+                    
+                    const qr = qrcode(0, 'M');
+                    qr.addData('EventHub Test QR Code');
+                    qr.make();
+                    
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const modules = qr.getModuleCount();
+                    const cellSize = 3;
+                    const margin = 4;
+                    
+                    canvas.width = canvas.height = modules * cellSize + margin * 2;
+                    
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.fillStyle = '#6366f1';
+                    for (let row = 0; row < modules; row++) {
+                        for (let col = 0; col < modules; col++) {
+                            if (qr.isDark(row, col)) {
+                                ctx.fillRect(
+                                    col * cellSize + margin,
+                                    row * cellSize + margin,
+                                    cellSize,
+                                    cellSize
+                                );
+                            }
+                        }
+                    }
+                    
+                    qrContainer.appendChild(canvas);
+                    document.getElementById('qrStatus').innerHTML = '<span style="color: green;">✓ QR Code library hoạt động tốt!</span>';
+                    document.getElementById('qrTest').classList.add('success');
+                } else {
+                    // Fallback: QR bằng API
+                    qrContainer.innerHTML = '';
+                    
+                    const img = document.createElement('img');
+                    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent('EventHub Test QR Code');
+                    img.style.border = '2px solid #6366f1';
+                    img.style.borderRadius = '8px';
+                    
+                    img.onload = function() {
+                        document.getElementById('qrStatus').innerHTML = '<span style="color: green;">✓ QR Code (API) hoạt động tốt!</span>';
+                        document.getElementById('qrTest').classList.add('success');
+                    };
+                    
+                    img.onerror = function() {
+                        // Fallback cuối: Text QR
+                        qrContainer.innerHTML = `
+                            <div style="width: 150px; height: 150px; border: 2px solid #6366f1; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; font-family: monospace; background: white;">
+                                <div style="font-size: 36px; margin-bottom: 10px;">📱</div>
+                                <div style="color: #6366f1; font-weight: bold; font-size: 12px;">QR TEST</div>
+                            </div>
+                        `;
+                        document.getElementById('qrStatus').innerHTML = '<span style="color: orange;">⚠ QR Code fallback</span>';
+                    };
+                    
+                    qrContainer.appendChild(img);
+                }
+            } catch (error) {
+                console.error('QR Test Error:', error);
+                // Manual fallback
+                const qrContainer = document.getElementById('testQR');
+                qrContainer.innerHTML = `
+                    <div style="width: 150px; height: 150px; border: 2px solid #6366f1; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; font-family: monospace; background: white;">
+                        <div style="font-size: 36px; margin-bottom: 10px;">📱</div>
+                        <div style="color: #6366f1; font-weight: bold; font-size: 12px;">QR ERROR</div>
+                        <div style="color: #6b7280; font-size: 10px; margin-top: 5px;">Manual fallback</div>
+                    </div>
+                `;
+                document.getElementById('qrStatus').innerHTML = '<span style="color: red;">✗ QR Code lỗi (dùng fallback)</span>';
+            }
+        }
+        
+        function goToDashboard() {
+            window.location.href = 'pages/dashboard.html';
+        }
+        
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Quản Lý Sự Kiện</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>EventQR</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-outline" onclick="openLoginModal()">
+                        <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                    </button>
+                    <button class="btn btn-primary" onclick="openRegisterModal()">
+                        <i class="fas fa-user-plus"></i> Đăng Ký
+                    </button>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+     
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Quản Lý Sự Kiện
+                    <span class="highlight">Chuyên Nghiệp</span>
+                </h1>
+                <p class="hero-description">
+                    Tạo, quản lý và theo dõi các sự kiện của bạn một cách dễ dàng với EventHub.
+                    Nền tảng toàn diện cho mọi nhu cầu tổ chức sự kiện.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" onclick="openRegisterModal()">
+                        <i class="fas fa-rocket"></i> Bắt Đầu Ngay
+                    </button>
+                    <button class="btn btn-outline btn-large" onclick="scrollToFeatures()">
+                        <i class="fas fa-play"></i> Tìm Hiểu Thêm
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Sự Kiện Của Tôi</h3>
+                    <div class="event-list">
+                        <div class="event-item">
+                            <span class="event-date">15 Sep</span>
+                            <span class="event-name">Hội thảo công nghệ</span>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-date">22 Sep</span>
+                            <span class="event-name">Workshop design</span>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-date">30 Sep</span>
+                            <span class="event-name">Meetup startup</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tính Năng Nổi Bật</h2>
+                <p class="section-description">
+                    Khám phá những tính năng mạnh mẽ giúp bạn quản lý sự kiện hiệu quả
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Quản Lý Người Dùng</h3>
+                    <p>Đăng ký, đăng nhập và quản lý thông tin người dùng một cách an toàn và tiện lợi.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h3>Tạo Sự Kiện</h3>
+                    <p>Tạo và tùy chỉnh sự kiện với giao diện trực quan, thêm hình ảnh, mô tả chi tiết.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Thống Kê & Báo Cáo</h3>
+                    <p>Theo dõi hiệu suất sự kiện với biểu đồ và báo cáo chi tiết, trực quan.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3>Quản Lý Vé</h3>
+                    <p>Tạo, bán và quản lý vé sự kiện với nhiều loại vé và giá khác nhau.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Thông Báo</h3>
+                    <p>Gửi thông báo tự động đến người tham dự về cập nhật sự kiện.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsive Design</h3>
+                    <p>Giao diện thân thiện trên mọi thiết bị: desktop, tablet và smartphone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Về EventHub</h2>
+                    <p>
+                        EventHub là nền tảng quản lý sự kiện hiện đại, được thiết kế để đơn giản hóa
+                        quá trình tổ chức và quản lý sự kiện của bạn. Với giao diện trực quan và
+                        tính năng mạnh mẽ, chúng tôi giúp bạn tập trung vào những gì quan trọng nhất.
+                    </p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">1000+</span>
+                            <span class="stat-label">Sự kiện đã tổ chức</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">5000+</span>
+                            <span class="stat-label">Người dùng tin tưởng</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">99%</span>
+                            <span class="stat-label">Độ hài lòng</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-card">
+                        <i class="fas fa-star"></i>
+                        <h4>Đánh giá cao</h4>
+                        <p>Được tin tưởng bởi hàng nghìn người dùng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Liên Hệ Với Chúng Tôi</h2>
+                <p class="section-description">
+                    Có câu hỏi? Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7
+                </p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h4>Email</h4>
+                        <p>hoviethao20042005@gmail.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <h4>Điện thoại</h4>
+                        <p>+84 762 886 983</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h4>Địa chỉ</h4>
+                        <p>East Sea Park, Sơn Trà, Đà Nẵng</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <h4>Giờ làm việc</h4>
+                        <p>Thứ 2 – Thứ 7: 8:00 – 18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.436050829623!2d108.23124431421085!3d16.058935988892803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421831b7a0df33%3A0x2f2434a8f87b1d0b!2sEast%20Sea%20Park%2C%20S%C6%A1n%20Tr%C3%A0%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng!5e0!3m2!1svi!2s!4v1694149200000!5m2!1svi!2s"
+                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>EventHub</span>
+                    </div>
+                    <p>Nền tảng quản lý sự kiện hàng đầu Việt Nam</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1CUsfQqZQ7/?mibextid=wwXIfr"><i
+                                class="fab fa-facebook"></i></a>
+                        <a href=""><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/viethao.__/?igsh=MXNqOTRwcHF4OW1kaA%3D%3D&utm_source=qr"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Sản phẩm</h4>
+                    <ul>
+                        <li><a href="#">Quản lý sự kiện</a></li>
+                        <li><a href="#">Bán vé online</a></li>
+                        <li><a href="#">Thống kê báo cáo</a></li>
+                        <li><a href="#">Ứng dụng mobile</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="#">Trung tâm trợ giúp</a></li>
+                        <li><a href="#">Hướng dẫn sử dụng</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Pháp lý</h4>
+                    <ul>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Chính sách cookie</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EventHub. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Đăng Nhập</h2>
+                <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            </div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mật khẩu</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Ghi nhớ đăng nhập
+                    </label>
+                    <a href="#" onclick="openForgotPasswordModal()">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Đăng Nhập</button>
+                <div class="form-divider">
+                    <span>hoặc</span>
+                </div>
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    Đăng nhập với Google
+                </button>
+                <p class="form-switch">
+                    Chưa có tài khoản?
+                    <a href="#" onclick="switchToRegister()">Đăng ký ngay</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Đăng Ký</h2>
+                <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            </div>
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Họ và tên</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Mật khẩu</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+
+                <!-- Vai trò (radio, chỉ chọn 1) -->
+                <div class="form-group" style="display: flex; gap: 20px; margin-top: 5px;">
+                    <label class="checkbox">
+                        <input type="radio" name="role" value="user" required>
+                        <span class="checkmark"></span>
+                        Người tham gia
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="role" value="organizer" required>
+                        <span class="checkmark"></span>
+                        Người quản lý
+                    </label>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" required>
+                        <span class="checkmark"></span>
+                        Tôi đồng ý với <a href="#">Điều khoản sử dụng</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Đăng Ký</button>
+                <div class="form-divider">
+                    <span>hoặc</span>
+                </div>
+                <button type="button" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    Đăng ký với Google
+                </button>
+                <p class="form-switch">
+                    Đã có tài khoản?
+                    <a href="#" onclick="switchToLogin()">Đăng nhập ngay</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Quên Mật Khẩu</h2>
+                <span class="close" onclick="closeModal('forgotPasswordModal')">&times;</span>
+            </div>
+            <form class="auth-form" id="forgotPasswordForm">
+                <p class="form-description">
+                    Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu
+                </p>
+                <div class="form-group">
+                    <label for="forgotEmail">Email</label>
+                    <input type="email" id="forgotEmail" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Gửi Link Đặt Lại</button>
+                <p class="form-switch">
+                    Nhớ lại mật khẩu?
+                    <a href="#" onclick="switchToLogin()">Đăng nhập</a>
+                </p>
+            </form>
+        </div>
+    </div>
+  <script src="js/core/main.js"></script>
+  <script src="js/core/chatbot.js"></script>
+
+</body>
+</html>

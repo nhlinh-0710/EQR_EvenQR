@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Sự Kiện - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placeholders.css">
+    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+    <link rel="stylesheet" href="../../css/chatbot.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="events.html" class="menu-link">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sự Kiện của tôi</span>
+            </a>
+            <a href="create_event.html" class="menu-link active">
+                <i class="fas fa-plus-circle"></i>
+                <span>Tạo Sự Kiện</span>
+            </a>
+        <a href="qr.html" class="menu-link">
+            <i class="fas fa-qrcode"></i>
+            <span>QR Check-in</span>
+        </a>
+        <a href="static.html" class="menu-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Thống Kê</span>
+            </a>
+            <a href="feedback.html" class="menu-link">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Tạo Sự Kiện</h1>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Thông báo</h3>
+                            <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                                Đánh dấu tất cả đã đọc
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-loading">Đang tải...</div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#" onclick="viewAllNotifications()">Xem tất cả</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+
+
+        <!-- Create Event Section -->
+        <section id="create-event-section" class="content-section active">
+            <h2>Tạo Sự Kiện Mới</h2>
+
+            <form class="create-event-form" id="createEventForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="eventTitle">Tên sự kiện *</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventCategory">Danh mục</label>
+                        <select id="eventCategory">
+                            <option value="">Chọn danh mục</option>
+                            <option value="conference">Hội thảo</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="meetup">Meetup</option>
+                            <option value="seminar">Hội nghị</option>
+                            <option value="training">Đào tạo</option>
+                            <option value="training">Ca Nhạc</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDate">Ngày tổ chức *</label>
+                        <input type="datetime-local" id="eventDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDuration">Thời lượng (giờ)</label>
+                        <input type="number" id="eventDuration" min="1" max="24" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventLocation">Địa điểm *</label>
+                        <input type="text" id="eventLocation" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxParticipants">Số người tham dự tối đa</label>
+                        <input type="number" id="maxParticipants" min="1" value="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Mô tả sự kiện</label>
+                    <textarea id="eventDescription" rows="4" placeholder="Mô tả chi tiết về sự kiện..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventImage">Hình ảnh sự kiện</label>
+                    <div class="file-upload">
+                        <input type="file" id="eventImage" accept="image/*">
+                        <div class="file-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Kéo thả hoặc click để chọn hình ảnh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline">Lưu Nháp</button>
+                    <button type="submit" class="btn btn-primary">Tạo Sự Kiện</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Core Scripts -->
+    <!-- WebSocket Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    
+    <script src="../../js/core/auth.js"></script>
+    <script src="../../js/core/websocket.js"></script>
+    <script src="../../js/admin/notifications.js"></script>
+    <script src="../../js/admin/create-event.js"></script>
+    <script src="../../js/core/chatbot.js"></script>
+    <!-- <style>
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+    </style> -->
+</body>
+
+</html>

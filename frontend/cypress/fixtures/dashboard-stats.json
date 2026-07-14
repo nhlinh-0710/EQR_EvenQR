@@ -1,0 +1,15 @@
+{
+  "activeEvents": 5,
+  "totalAttendees": 150,
+  "totalTicketsSold": 200,
+  "totalRevenue": 5000000,
+  "checkinRate": 0.75,
+  "timeSeriesStats": [
+    { "month": "01", "events": 2 },
+    { "month": "02", "events": 3 }
+  ],
+  "eventStats": [
+    { "eventId": 1, "title": "Event 1", "attendees": 50 }
+  ]
+}
+

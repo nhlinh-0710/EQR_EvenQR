@@ -1,0 +1,33 @@
+[
+  {
+    "checkinId": 1,
+    "userId": 1,
+    "eventId": 1,
+    "ticketId": 1,
+    "checkinTime": "2024-12-20T10:30:00",
+    "user": {
+      "fullName": "Test User",
+      "email": "user@eventqr.com"
+    },
+    "event": {
+      "title": "Test Event",
+      "eventId": 1
+    }
+  },
+  {
+    "checkinId": 2,
+    "userId": 2,
+    "eventId": 1,
+    "ticketId": 2,
+    "checkinTime": "2024-12-20T11:00:00",
+    "user": {
+      "fullName": "Another User",
+      "email": "another@eventqr.com"
+    },
+    "event": {
+      "title": "Test Event",
+      "eventId": 1
+    }
+  }
+]
+

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hồ Sơ - EventQR</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/admin/dashboard.css" />
+  <link rel="stylesheet" href="../../css/placeholders.css" />
+  <link rel="stylesheet" href="../../css/user/qr-checkin.css" />
+  <link rel="stylesheet" href="../../css/user/suggest-events.css" />
+  <link rel="stylesheet" href="../../css/user/my-tickets.css" />
+  <link rel="stylesheet" href="../../css/user/my-events.css" />
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-calendar-alt"></i>
+            <span>EventQR</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <a href="index.html" class="menu-link">
+            <i class="fas fa-fire"></i>
+            <span>Gợi ý sự kiện</span>
+        </a>
+        <a href="tickets.html" class="menu-link">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Vé của tôi</span>
+        </a>
+        <a href="profile.html" class="menu-link active">
+            <i class="fas fa-user-cog"></i>
+            <span>Hồ Sơ</span>
+        </a>
+        <a href="feedback.html" class="menu-link">
+            <i class="fas fa-comments"></i>
+            <span>Feedback</span>
+        </a>
+    </div>
+    <div class="sidebar-footer">
+        <button class="logout-btn" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Đăng Xuất</span>
+        </button>
+    </div>
+</div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Mở/đóng menu trên di động">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 id="pageTitle">Hồ Sơ</h1>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Tìm kiếm sự kiện..." />
+        </div>
+        <div class="notifications">
+          <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()" aria-label="Thông báo">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notification-badge">0</span>
+          </button>
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notificationPanel">
+              <div class="notification-header">
+                  <h3>Thông báo</h3>
+                  <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                      Đánh dấu tất cả đã đọc
+                  </button>
+              </div>
+              <div class="notification-list" id="notificationList">
+                  <div class="notification-loading">Đang tải...</div>
+              </div>
+              <div class="notification-footer">
+                  <a href="#" onclick="viewAllNotifications()">Xem tất cả</a>
+              </div>
+          </div>
+        </div>
+        <div class="user-profile">
+          <div class="avatar-placeholder" id="userAvatar">U</div>
+          <span class="user-name" id="userName">Người dùng</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile Section -->
+    <section id="profile-section" class="content-section">
+      <div class="ap-wrap">
+        <!-- HERO -->
+        <div class="ap-hero">
+          <div class="ap-left">
+            <img loading="lazy" 
+                 src="https://ui-avatars.com/api/?name=User&background=6C5CE7&color=fff&size=200"
+                 alt="Profile Avatar" 
+                 class="ap-avatar"
+                 id="profile-avatar" />
+          </div>
+          <div class="ap-right">
+            <h1 class="ap-name" id="profile-name">Đang tải...</h1>
+            <p class="ap-title" id="profile-role">Người dùng</p>
+            <p class="ap-about" id="profile-about">
+              Thành viên của EventQR - Nền tảng quản lý sự kiện hiện đại và tiện lợi.
+            </p>
+
+            <button class="edit-profile-btn"><i class="fas fa-edit"></i> Sửa hồ sơ</button>
+
+            <div class="ap-meta-badges">
+              <span class="badge">🎫 EventQR Member</span>
+              <span class="badge">⚡ Active User</span>
+            </div>
+
+            <div class="ap-socials" style="display:flex; gap:8px; margin-top: 12px;">
+              <a href="#" id="profile-email-link" aria-label="Email" title="">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+            <div style="margin-top: 8px; color: #6b7280; font-size: 14px;">
+              <div><i class="fas fa-envelope" style="margin-right: 6px;"></i><span id="profile-email-text">-</span></div>
+              <div style="margin-top: 4px;"><i class="fas fa-phone" style="margin-right: 6px;"></i><span id="profile-phone-text">-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="ap-stats">
+          <div class="stat">
+            <div class="stat-num" id="stat-events">0</div>
+            <div class="stat-label">Sự kiện đã tham gia</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-tickets">0</div>
+            <div class="stat-label">Vé đang có</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-checkins">0</div>
+            <div class="stat-label">Lượt check-in</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-member">-</div>
+            <div class="stat-label">Thành viên từ</div>
+          </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="ap-projects">
+          <h2 class="ap-h2">Vé của tôi</h2>
+          <div class="ap-grid">
+            <!-- Tickets will be loaded dynamically -->
+          </div>
+        </div>
+        <!-- EDIT PROFILE MODAL -->
+<div id="profileEditModal" class="edit-modal">
+  <div class="edit-modal-content">
+    <h2>Sửa hồ sơ</h2>
+
+    <label>Ảnh đại diện</label>
+    <input type="file" id="editAvatar">
+
+    <label>Tiêu đề (Tên nhóm / Tên người dùng)</label>
+    <input type="text" id="editTitle">
+
+    <label>Chức danh</label>
+    <input type="text" id="editSubtitle">
+
+    <label>Mô tả</label>
+    <textarea id="editDescription"></textarea>
+
+    <label>Facebook URL</label>
+    <input type="text" id="editFacebook">
+
+    <label>GitHub URL</label>
+    <input type="text" id="editGithub">
+
+    <label>Email liên hệ</label>
+    <input type="email" id="editEmail">
+
+    <div class="modal-actions">
+      <button onclick="saveProfile()" class="save-btn">Lưu</button>
+      <button onclick="closeEditProfile()" class="close-btn">Hủy</button>
+    </div>
+  </div>
+</div>
+
+  <!-- WebSocket Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+  
+  <!-- JS cần thiết -->
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/websocket.js"></script>
+  <script src="../../js/admin/notifications.js"></script>
+  
+  <!-- JS cho trang Profile -->
+  <script>
+    // Load user profile data
+    document.addEventListener('DOMContentLoaded', async function() {
+      console.log('📄 User Profile page loaded');
+      
+      // Check authentication - use currentUser key like auth.js
+      const userDataString = localStorage.getItem('currentUser');
+      if (!userDataString) {
+        console.warn('⚠️ No user data found in localStorage');
+        return;
+      }
+      
+      const user = JSON.parse(userDataString);
+      
+      // Update user info in header
+      const userNameElement = document.getElementById('userName');
+      const userAvatarElement = document.getElementById('userAvatar');
+      
+      if (userNameElement) {
+        userNameElement.textContent = user.name || user.fullName || user.username || 'Người dùng';
+      }
+      
+      if (userAvatarElement) {
+        const initial = (user.name || user.fullName || user.username || 'U').charAt(0).toUpperCase();
+        userAvatarElement.textContent = initial;
+      }
+      
+      // ✅ Populate profile info
+      populateProfileInfo(user);
+      
+      // Load registered events
+      await loadRegisteredEvents(user.user_id);
+      
+      // Setup edit profile button
+      setupEditProfileButton();
+      
+      // Setup mobile menu
+      setupMobileMenu();
+      
+      // Setup sidebar toggle
+      setupSidebarToggle();
+    });
+    
+    // Populate profile information
+    function populateProfileInfo(user) {
+      console.log('📝 Populating profile info for user:', user);
+      
+      // Profile Avatar & Name
+      const profileAvatar = document.getElementById('profile-avatar');
+      const profileName = document.getElementById('profile-name');
+      const profileRole = document.getElementById('profile-role');
+      const profileEmailLink = document.getElementById('profile-email-link');
+      const profileEmailText = document.getElementById('profile-email-text');
+      const profilePhoneText = document.getElementById('profile-phone-text');
+      
+      if (!user) {
+        console.warn('⚠️ No user data provided');
+        return;
+      }
+      
+      if (profileName) {
+        profileName.textContent = user.name || user.fullName || user.username || 'Người dùng';
+        console.log('✅ Set profile name:', profileName.textContent);
+      }
+      
+      if (profileRole) {
+        const roleMap = {
+          'admin': '🔑 Quản trị viên',
+          'organizer': '👔 Người tổ chức',
+          'user': '👤 Người dùng'
+        };
+        profileRole.textContent = roleMap[user.role] || '👤 Người dùng';
+        console.log('✅ Set profile role:', profileRole.textContent);
+      }
+      
+      // Email
+      if (profileEmailLink && user.email) {
+        profileEmailLink.href = `mailto:${user.email}`;
+        profileEmailLink.title = user.email;
+      }
+      if (profileEmailText) {
+        profileEmailText.textContent = user.email || '-';
+        console.log('✅ Set email:', profileEmailText.textContent);
+      }
+      
+      // Phone
+      if (profilePhoneText) {
+        profilePhoneText.textContent = user.phone || 'Chưa cập nhật';
+        console.log('✅ Set phone:', profilePhoneText.textContent);
+      }
+      
+      // Update avatar with user initials
+      if (profileAvatar) {
+        const name = user.name || user.fullName || user.username || 'User';
+        profileAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6C5CE7&color=fff&size=200`;
+        profileAvatar.alt = name;
+        console.log('✅ Set avatar for:', name);
+      }
+    }
+    
+    // Load registered events
+    async function loadRegisteredEvents(userId) {
+      try {
+        console.log('📅 Loading registered events for user:', userId);
+        
+        const response = await fetch(`http://localhost:8080/api/user/${userId}/tickets`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to load events');
+        }
+        
+        const tickets = await response.json();
+        console.log('✅ Loaded tickets:', tickets);
+        
+        // ✅ Update stats
+        updateStats(tickets);
+        
+        displayRegisteredEvents(tickets);
+      } catch (error) {
+        console.error('❌ Error loading events:', error);
+        showNoEvents();
+      }
+    }
+    
+    // Update statistics
+    function updateStats(tickets) {
+      // Total events
+      const statEvents = document.getElementById('stat-events');
+      if (statEvents) statEvents.textContent = tickets.length;
+      
+      // Active tickets (not cancelled)
+      const activeTickets = tickets.filter(t => !t.cancelled).length;
+      const statTickets = document.getElementById('stat-tickets');
+      if (statTickets) statTickets.textContent = activeTickets;
+      
+      // Check-ins (mock - would need real API endpoint)
+      const statCheckins = document.getElementById('stat-checkins');
+      if (statCheckins) statCheckins.textContent = '-';
+      
+      // Member since
+      const statMember = document.getElementById('stat-member');
+      const userData = JSON.parse(localStorage.getItem('currentUser'));
+      if (statMember && userData && userData.created_at) {
+        const joinDate = new Date(userData.created_at);
+        const monthYear = joinDate.toLocaleDateString('vi-VN', { month: 'short', year: 'numeric' });
+        statMember.textContent = monthYear;
+      } else if (statMember) {
+        statMember.textContent = '-';
+      }
+    }
+    
+    // Display registered events
+    function displayRegisteredEvents(tickets) {
+      const gridContainer = document.querySelector('.ap-grid');
+      
+      if (!gridContainer) {
+        console.error('❌ Grid container not found');
+        return;
+      }
+      
+      if (!tickets || tickets.length === 0) {
+        showNoEvents();
+        return;
+      }
+      
+      // Take only the 3 most recent tickets
+      const recentTickets = tickets.slice(0, 3);
+      
+      gridContainer.innerHTML = recentTickets.map(ticket => {
+        // API trả về: ticketId, eventId, eventTitle, location, imageUrl, startTime, endTime, eventStatus, cancelled
+        const startTime = new Date(ticket.startTime);
+        const endTime = new Date(ticket.endTime);
+        const now = new Date();
+        
+        let status = '';
+        let statusColor = '';
+        
+        // Kiểm tra status
+        if (ticket.cancelled || ticket.eventStatus === 'CANCELLED') {
+          status = 'Đã hủy';
+          statusColor = '#EF4444';
+        } else if (endTime < now) {
+          status = 'Đã kết thúc';
+          statusColor = '#6B7280';
+        } else if (startTime > now) {
+          status = 'Sắp diễn ra';
+          statusColor = '#3B82F6';
+        } else {
+          status = 'Đang diễn ra';
+          statusColor = '#10B981';
+        }
+        
+        // Xử lý imageUrl giống như my-tickets.js
+        let finalImageUrl = 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop';
+        if (ticket.imageUrl) {
+          if (ticket.imageUrl.startsWith('http://') || ticket.imageUrl.startsWith('https://')) {
+            finalImageUrl = ticket.imageUrl;
+          } else if (ticket.imageUrl.startsWith('/')) {
+            finalImageUrl = 'http://localhost:8080' + ticket.imageUrl;
+          } else {
+            finalImageUrl = 'http://localhost:8080/images/' + ticket.imageUrl;
+          }
+        }
+        
+        return `
+          <article class="ap-card">
+            <div class="ap-card-cover">
+              <img loading="lazy" src="${finalImageUrl}" alt="${ticket.eventTitle}" />
+            </div>
+            <div class="ap-meta">
+              <h3>${ticket.eventTitle}</h3>
+              <p class="meta-line">
+                <i class="fas fa-calendar-alt"></i> ${formatDateTime(ticket.startTime)}
+              </p>
+              <p class="meta-line">
+                <i class="fas fa-map-marker-alt"></i> ${ticket.location}
+              </p>
+              <p>Vé #${ticket.ticketId}</p>
+              <div class="ap-tags">
+                <span style="
+                  background:${statusColor}20;
+                  color:${statusColor};
+                  padding:6px 12px;
+                  border-radius:12px;
+                  font-size:13px;
+                  font-weight:600;
+                ">${status}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+    
+    // Show no events message
+    function showNoEvents() {
+      const gridContainer = document.querySelector('.ap-grid');
+      if (gridContainer) {
+        gridContainer.innerHTML = `
+          <p style="text-align: center; color: #6b7280; padding: 2rem;">Chưa có vé nào. Hãy khám phá các sự kiện thú vị!</p>
+        `;
+      }
+    }
+    
+    // Format date time
+    function formatDateTime(dateString) {
+      const date = new Date(dateString);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${hours}:${minutes} ${day}/${month}/${year}`;
+    }
+    
+    // Setup edit profile button
+    function setupEditProfileButton() {
+      const editBtn = document.querySelector('.edit-profile-btn');
+      const modal = document.getElementById('profileEditModal');
+      
+      if (editBtn && modal) {
+        editBtn.addEventListener('click', () => {
+          modal.classList.add('show');
+        });
+      }
+    }
+    
+    // Close edit profile modal
+    function closeEditProfile() {
+      const modal = document.getElementById('profileEditModal');
+      if (modal) {
+        modal.classList.remove('show');
+      }
+    }
+    
+    // Save profile
+    function saveProfile() {
+      alert('Chức năng đang được phát triển!');
+      closeEditProfile();
+    }
+    
+    // Logout handler
+    function handleLogout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = '../../index.html';
+    }
+    
+    // Setup mobile menu
+    function setupMobileMenu() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+        });
+      }
+    }
+    
+    // Setup sidebar toggle
+    function setupSidebarToggle() {
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+        });
+      }
+    }
+    
+    // Toggle notification panel
+    function toggleNotificationPanel() {
+      const panel = document.getElementById('notificationPanel');
+      if (panel) {
+        panel.classList.toggle('show');
+      }
+    }
+    
+    // Mark all notifications as read
+    function markAllNotificationsAsRead() {
+      console.log('Marking all as read...');
+    }
+    
+    // View all notifications
+    function viewAllNotifications() {
+      console.log('View all notifications...');
+    }
+  </script>
+
+</body>
+
+</html>

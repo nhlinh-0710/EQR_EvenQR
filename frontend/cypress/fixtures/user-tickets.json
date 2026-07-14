@@ -1,0 +1,40 @@
+[
+  {
+    "ticketId": 1,
+    "eventId": 1,
+    "eventTitle": "Hội thảo công nghệ 2024",
+    "eventDate": "2024-08-01T10:00:00",
+    "eventLocation": "Hà Nội",
+    "ticketType": "REGULAR",
+    "status": "CONFIRMED",
+    "qrCode": "#1-E1-U1",
+    "createdAt": "2024-07-15T10:00:00",
+    "price": 0
+  },
+  {
+    "ticketId": 2,
+    "eventId": 2,
+    "eventTitle": "Workshop Marketing",
+    "eventDate": "2024-08-15T14:00:00",
+    "eventLocation": "TP.HCM",
+    "ticketType": "VIP",
+    "status": "CONFIRMED",
+    "qrCode": "#2-E2-U1",
+    "createdAt": "2024-07-20T10:00:00",
+    "price": 500000
+  },
+  {
+    "ticketId": 3,
+    "eventId": 3,
+    "eventTitle": "Seminar Khởi nghiệp",
+    "eventDate": "2024-09-01T09:00:00",
+    "eventLocation": "Đà Nẵng",
+    "ticketType": "REGULAR",
+    "status": "CANCELLED",
+    "qrCode": "#3-E3-U1",
+    "createdAt": "2024-07-25T10:00:00",
+    "cancelledAt": "2024-07-26T10:00:00",
+    "price": 0
+  }
+]
+

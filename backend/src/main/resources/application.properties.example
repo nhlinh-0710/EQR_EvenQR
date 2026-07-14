@@ -1,0 +1,51 @@
+spring.datasource.url=jdbc:mysql://localhost:3306/even_qr
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.web.resources.static-locations=file:uploads/,classpath:/static/
+
+server.port=8080
+
+# Giới hạn dung lượng tối đa cho file upload là 10MB
+spring.servlet.multipart.max-file-size=10MB
+
+# Giới hạn dung lượng tối đa cho toàn bộ request (bao gồm cả dữ liệu form) là 10MB
+spring.servlet.multipart.max-request-size=10MB
+
+# =================================================================
+# CẤU HÌNH THƯ MỤC LƯU FILE UPLOAD
+# =================================================================
+# Bạn có thể chọn một trong các cách sau:
+
+# 1. LƯU TRONG DỰ ÁN (Mặc định - Development)
+file.upload-dir=uploads/images/events
+
+# 2. LƯU Ở Ổ D: (Windows)
+# file.upload-dir=D:/EventQR_Images
+
+# 3. LƯU Ở Ổ C: (Windows - Documents)
+# file.upload-dir=C:/Users/YourName/Documents/EventQR_Images
+
+# 4. LƯU Ở Desktop (Windows)
+# file.upload-dir=C:/Users/YourName/Desktop/EventQR_Uploads
+
+# 5. LƯU Ở Linux/Mac (Home Directory)
+# file.upload-dir=/home/username/EventQR_Images
+
+# 6. LƯU Ở Server (Linux - Production)
+# file.upload-dir=/var/www/uploads/events
+
+# 7. LƯU Ở Ổ Cứng Ngoài (Windows - External Drive)
+# file.upload-dir=E:/EventImages
+
+# =================================================================
+# Lưu ý:
+# - Windows: Dùng dấu "/" thay vì "\"
+# - Đảm bảo ứng dụng có quyền ghi vào thư mục đó
+# - Thư mục sẽ tự động được tạo nếu chưa tồn tại
+# =================================================================
+

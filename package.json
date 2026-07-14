@@ -1,0 +1,31 @@
+{
+  "name": "eventqr",
+  "version": "1.0.0",
+  "description": "EventQR - Hệ thống quản lý sự kiện thông minh",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start:frontend": "npm --prefix frontend start",
+    "start:backend": "mvn -f backend/pom.xml spring-boot:run",
+    "build:backend": "mvn -f backend/pom.xml clean package -DskipTests",
+    "test": "playwright test",
+    "test:api": "playwright test --project=api",
+    "test:ui": "playwright test --project=ui"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhlinh-0710/EventQR.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhlinh-0710/EventQR/issues"
+  },
+  "homepage": "https://github.com/nhlinh-0710/EventQR#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}

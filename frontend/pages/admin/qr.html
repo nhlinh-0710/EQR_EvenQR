@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Check-in - EventQR</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS dùng chung -->
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placeholders.css">
+
+    <!-- CSS riêng cho QR + user -->
+    <link rel="stylesheet" href="../../css/admin/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+</head>
+
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-calendar-alt"></i>
+            <span>EventQR</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <a href="index.html" class="menu-link">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="events.html" class="menu-link">
+            <i class="fas fa-calendar-check"></i>
+            <span>Sự Kiện của tôi</span>
+        </a>
+        <a href="create_event.html" class="menu-link">
+            <i class="fas fa-plus-circle"></i>
+            <span>Tạo Sự Kiện</span>
+        </a>
+        <a href="qr.html" class="menu-link active">
+            <i class="fas fa-qrcode"></i>
+            <span>QR Check-in</span>
+        </a>
+        <a href="static.html" class="menu-link">
+            <i class="fas fa-chart-bar"></i>
+            <span>Thống Kê</span>
+        </a>
+        <a href="feedback.html" class="menu-link">
+            <i class="fas fa-comments"></i>
+            <span>Feedback</span>
+        </a>
+        <a href="profile.html" class="menu-link">
+            <i class="fas fa-user-cog"></i>
+            <span>Hồ Sơ</span>
+        </a>
+    </div>
+    <div class="sidebar-footer">
+        <button class="logout-btn" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Đăng Xuất</span>
+        </button>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <header class="header">
+        <div class="header-left">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 id="pageTitle">QR Check-in</h1>
+        </div>
+        <div class="header-right">
+            <div class="notifications">
+                <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-badge">0</span>
+                </button>
+
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-header">
+                        <h3>Thông báo</h3>
+                        <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                            Đánh dấu tất cả đã đọc
+                        </button>
+                    </div>
+                    <div class="notification-list" id="notificationList">
+                        <div class="notification-loading">Đang tải...</div>
+                    </div>
+                    <div class="notification-footer">
+                        <a href="#" onclick="viewAllNotifications()">Xem tất cả</a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile">
+                <div class="avatar-placeholder" id="userAvatar">U</div>
+                <span class="user-name" id="userName">Người dùng</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- QR Check-in Section -->
+    <section id="qr-checkin-section" class="content-section active">
+        <div class="qr-checkin-container">
+            <div class="section-header">
+                <h2>QR Code Check-in</h2>
+                <p>Quản lý check-in sự kiện bằng QR code</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="qr-tabs">
+                <button class="qr-tab active" data-tab="scan">Quét QR Code</button>
+                <button class="qr-tab" data-tab="history">Lịch Sử Check-in</button>
+            </div>
+
+            <!-- Scan QR Code Tab -->
+            <div id="scan-tab" class="qr-tab-content active">
+                <div class="qr-scan-section">
+
+                    <div class="scan-methods">
+                        <div class="scan-method">
+                            <h3>Quét bằng Camera</h3>
+                            <div class="camera-scanner">
+                                <video id="qrVideo" class="qr-video" style="display: none;"></video>
+                                <div id="qrScanResult" class="scan-result" style="display: none;"></div>
+
+                                <div class="scanner-controls">
+                                    <button class="btn btn-primary" onclick="startQRScanner()" id="startScanBtn">
+                                        <i class="fas fa-camera"></i> Bắt đầu quét
+                                    </button>
+                                    <button class="btn btn-outline" onclick="stopQRScanner()" id="stopScanBtn"
+                                            style="display: none;">
+                                        <i class="fas fa-stop"></i> Dừng quét
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scan-method">
+                            <h3>Nhập mã thủ công</h3>
+                            <div class="manual-input">
+                                <div class="form-group">
+                                    <label for="manualQRCode">Mã QR:</label>
+                                    <input type="text" id="manualQRCode" placeholder="Nhập mã QR code...">
+                                </div>
+                                <button class="btn btn-primary" onclick="processManualQRCode()">
+                                    <i class="fas fa-check"></i> Xác nhận Check-in
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkin-form" id="checkinForm" style="display: none;">
+                        <h3>Thông tin Check-in</h3>
+                        <div class="checkin-details">
+                            <div class="form-group">
+                                <label for="participantName">Tên người tham dự:</label>
+                                <input type="text" id="participantName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="participantEmail">Email:</label>
+                                <input type="email" id="participantEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="participantPhone">Số điện thoại:</label>
+                                <input type="tel" id="participantPhone">
+                            </div>
+
+                            <div class="event-info">
+                                <p><strong>Sự kiện:</strong> <span id="checkinEventName"></span></p>
+                                <p><strong>Thời gian:</strong> <span id="checkinTime"></span></p>
+                            </div>
+
+                            <div class="checkin-actions">
+                                <button class="btn btn-primary" onclick="confirmCheckin()">
+                                    <i class="fas fa-check-circle"></i> Xác nhận Check-in
+                                </button>
+                                <button class="btn btn-outline" onclick="cancelCheckin()">
+                                    <i class="fas fa-times"></i> Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Check-in History Tab -->
+            <div id="history-tab" class="qr-tab-content">
+                <div class="checkin-history">
+
+                    <div class="history-filters">
+                        <div class="filter-container">
+                            <div class="filter-group">
+                                <label for="historyEventFilter">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Sự kiện
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <select id="historyEventFilter">
+                                        <option value="">Tất cả sự kiện</option>
+                                        <!-- Các sự kiện sẽ được load từ API -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="historyDateFilter">
+                                    <i class="fas fa-calendar-day"></i>
+                                    Ngày
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="historyDateFilter" placeholder="Chọn ngày...">
+                                </div>
+                            </div>
+
+                            <div class="filter-actions">
+                                <button class="btn btn-primary" onclick="filterCheckinHistory()">
+                                    <i class="fas fa-filter"></i> Lọc
+                                </button>
+                                <button class="btn btn-outline" onclick="resetFilters()">
+                                    <i class="fas fa-redo"></i> Đặt lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                            <div class="stat-info"><h3 id="totalCheckins">25</h3><p>Tổng check-in</p></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info"><h3 id="todayCheckins">8</h3><p>Check-in hôm nay</p></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                            <div class="stat-info"><h3 id="activeEvents">3</h3><p>Sự kiện đang diễn ra</p></div>
+                        </div>
+                    </div>
+
+                    <div class="history-table">
+                        <table class="checkin-table">
+                            <thead>
+                            <tr>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Sự kiện</th>
+                                <th>Thời gian Check-in</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody id="checkinTableBody"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- ================= Scripts ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+<script src="../../js/core/auth.js"></script>
+<script src="../../js/core/websocket.js"></script>
+<script src="../../js/admin/notifications.js"></script>
+<script src="../../js/user/qr-checkin.js"></script>
+<script src="../../js/admin/feedback.js" defer></script>
+
+</body>
+</html>

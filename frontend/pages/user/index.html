@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gợi ý sự kiện - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placeholders.css">
+    
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/chatbot.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="#suggest-events" class="menu-item active" data-section="suggest-events">
+                <i class="fas fa-fire"></i>
+                <span>Gợi ý sự kiện</span>
+            </a>
+
+            <a href="tickets.html" class="menu-item" data-section="my-tickets">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Vé của tôi</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+            <a href="#feedback" class="menu-item" data-section="feedback">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Gợi ý sự kiện</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Thông báo</h3>
+                            <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                                Đánh dấu tất cả đã đọc
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-loading">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================== -->
+        <!-- 🎯 GỢI Ý SỰ KIỆN – HOÀN CHỈNH -->
+        <!-- ========================== -->
+        <section id="suggest-events-section" class="content-section bg-gradient">
+            <div class="container">
+
+                <!-- Header -->
+                <header class="event-header">
+                    <h2 class="title">🎯 Gợi ý sự kiện</h2>
+
+                    <div class="tools">
+                        <input type="text" class="search-input" placeholder="🔍 Tìm theo tên / địa điểm / thể loại...">
+                        <label class="onlynew">
+                            <input type="checkbox" id="filterRecent">
+                            <span>Chỉ hiển thị sự kiện 7 ngày gần đây</span>
+                        </label>
+                    </div>
+                </header>
+
+                <!-- Tabs -->
+                <nav class="tabs">
+                    <button class="tab active">Tất cả</button>
+                    <button class="tab">Sắp diễn ra</button>
+                    <button class="tab">Đang diễn ra</button>
+                    <button class="tab">Đã kết thúc</button>
+                </nav>
+
+                <!-- Layout -->
+                <div class="layout">
+
+                    <!-- Main Panel -->
+                    <section class="panel main">
+                        <h3>✨ Vừa đăng tải · <span class="muted">Săn deal sớm</span></h3>
+
+                        <div class="grid" id="eventGrid"></div>
+                        <div class="pagination"></div>
+                    </section>
+
+                    <!-- Right Panel -->
+                    <aside class="panel side">
+                        <h3>🔥 Đang HOT</h3>
+                        <ol class="list" id="hotList"></ol>
+
+                        <a href="javascript:void(0)" class="viewall" id="seeTop">Xem Top 20 →</a>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+        <!-- Đăng ký sự kiện -->
+        <div class="modal-overlay" id="registerModal">
+            <div class="modal-container">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h2><i class="fas fa-calendar-check"></i> Đăng Ký Tham Gia Sự Kiện</h2>
+                    <p>Vui lòng điền đầy đủ thông tin để hoàn tất đăng ký</p>
+                    <button class="modal-close" onclick="closeRegisterModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body" id="modalBody">
+                    <!-- Event Info -->
+                    <div class="event-info">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400" alt="Event"
+                            class="event-thumbnail" id="modalEventImage">
+                        <div class="event-details">
+                            <h3 id="modalEventTitle">Music Fest – Summer Vibes</h3>
+                            <div class="event-meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="modalEventLocation">Quận 1, TP. Hồ Chí Minh</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span id="modalEventDate">20:00 22/10/2024 → 22:00 23/10/2024</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <i class="fas fa-tag"></i>
+                                <span id="modalEventCategory">Âm nhạc</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form class="register-form" id="registerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Họ và tên <span class="required">*</span></label>
+                                <input type="text" id="fullName" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email <span class="required">*</span></label>
+                                <input type="email" id="email" placeholder="example@email.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Số điện thoại <span class="required">*</span></label>
+                                <input type="tel" id="phone" placeholder="0123456789" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nghề nghiệp</label>
+                                <select id="occupation">
+                                    <option value="">Chọn nghề nghiệp</option>
+                                    <option value="student">Sinh viên</option>
+                                    <option value="employee">Nhân viên</option>
+                                    <option value="freelancer">Freelancer</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Selection -->
+                        <div class="form-group full-width">
+                            <label>Chọn loại vé <span class="required">*</span></label>
+                            <div class="ticket-options">
+                                <div class="ticket-option" onclick="selectTicket(this, 'vip')">
+                                    <div class="ticket-info">
+                                        <h4>🌟 VIP Ticket</h4>
+                                        <p>Ghế ngồi ưu tiên, đồ uống miễn phí</p>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-price">500.000 ₫</div>
+                                        <div class="ticket-quantity">
+                                            <button type="button" class="qty-btn"
+                                                onclick="changeQty(this, -1)">-</button>
+                                            <input type="number" class="qty-input" value="0" min="0" max="10" readonly>
+                                            <button type="button" class="qty-btn"
+                                                onclick="changeQty(this, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ticket-option selected" onclick="selectTicket(this, 'regular')">
+                                    <div class="ticket-info">
+                                        <h4>🎫 Regular Ticket</h4>
+                                        <p>Vé thường, vị trí đứng tự do</p>
+                                    </div>
+                                    <div>
+                                        <div class="ticket-price">200.000 ₫</div>
+                                        <div class="ticket-quantity">
+                                            <button type="button" class="qty-btn"
+                                                onclick="changeQty(this, -1)">-</button>
+                                            <input type="number" class="qty-input" value="1" min="0" max="10" readonly>
+                                            <button type="button" class="qty-btn"
+                                                onclick="changeQty(this, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="form-group full-width">
+                            <label>Ghi chú (không bắt buộc)</label>
+                            <textarea id="notes" placeholder="Nhập ghi chú của bạn..."></textarea>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="total-section">
+                            <h3>Tổng thanh toán:</h3>
+                            <div class="total-amount" id="totalAmount">149.000 ₫</div>
+                        </div>
+                    </form>
+
+                    <!-- Success Message (Hidden by default) -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2>Đăng Ký Thành Công!</h2>
+                        <p style="color: #666; margin: 15px 0;">Vé của bạn đã được xác nhận. Chúng tôi đã gửi thông tin
+                            chi tiết qua email.</p>
+                        <button class="btn btn-register" onclick="closeRegisterModal()" style="margin-top: 20px;">
+                            <i class="fas fa-check"></i> Hoàn Tất
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer" id="modalFooter">
+                    <button class="btn btn-cancel" onclick="closeRegisterModal()">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
+                    <button class="btn btn-register" onclick="submitRegisterForm()">
+                        <i class="fas fa-check"></i> Xác Nhận Đăng Ký
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Top 20 -->
+        <div id="top20Modal" class="top20-modal">
+            <div class="top20-content">
+
+                <div class="top20-header">
+                    🔥 Top 20 Sự kiện
+                    <button id="closeTop20" class="top20-close">&times;</button>
+                </div>
+
+                <div class="top20-body">
+                    <ol id="top20List" class="top20-list"></ol>
+                </div>
+
+            </div>
+        </div>
+
+    
+
+        <!-- WebSocket & Notifications -->
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+        <script src="../../js/core/websocket.js"></script>
+        <script src="../../js/core/notifications.js"></script>
+        <!-- Auth Check - Must load first -->
+        <script src="../../js/core/auth.js"></script>
+        <script>
+            // Check if user is authenticated (any role)
+            document.addEventListener('DOMContentLoaded', function () {
+                const userData = initAuth();
+                if (!userData) {
+                    // User will be redirected by auth.js
+                    return;
+                }
+                console.log('User authenticated:', userData);
+            });
+        </script>
+
+        <script src="../../js/core/dashboard.js"></script>
+
+        <!-- QR Code Library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Tìm menu item "Gợi ý sự kiện" theo data-section
+                const suggestMenu = document.querySelector('.menu-item[data-section="suggest-events"]');
+                if (suggestMenu) {
+                    suggestMenu.click();
+                }
+            });
+        </script>
+
+        <script src="../../js/user/simple-qr.js"></script>
+        <script src="../../js/admin/dashboard.js"></script>
+        <script src="../../js/user/qr-checkin.js"></script>
+        <script src="../../js/admin/feedback.js" defer></script>
+        <script src="../../js/user/suggest-events.js"></script>
+        <script src="../../js/user/my-tickets.js"></script>
+        <script src="../../js/core/chatbot.js"></script>
+        
+</body>
+
+</html>

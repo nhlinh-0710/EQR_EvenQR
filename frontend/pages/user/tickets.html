@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vé của tôi - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placeholders.css">
+    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-fire"></i>
+                <span>Gợi ý sự kiện</span>
+            </a>
+            <a href="tickets.html" class="menu-link active">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Vé của tôi</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+            <a href="feedback.html" class="menu-link">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Vé của tôi</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Thông báo</h3>
+                            <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                                Đánh dấu tất cả đã đọc
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-loading">Đang tải...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- My Tickets Section -->
+        <section id="my-tickets-section" class="content-section tickets-section" style="display: block;">
+            <!-- Header -->
+            <header class="tickets-hero">
+                <div class="hero-left">
+                    <h1>Vé Của Tôi</h1>
+                    <p>Quản lý toàn bộ vé sự kiện của bạn – nhanh, đẹp, đẳng cấp.</p>
+                </div>
+                <div class="hero-right">
+                    <div class="stat">
+                        <span class="label">Sắp diễn ra</span>
+                        <span class="value" id="stat-upcoming">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Đang diễn ra</span>
+                        <span class="value" id="stat-ongoing">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Đã kết thúc</span>
+                        <span class="value" id="stat-ended">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Đã hủy</span>
+                        <span class="value" id="stat-canceled">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tools -->
+            <div class="tickets-toolbar">
+                <div class="tabs" role="tablist" aria-label="Bộ lọc vé">
+                    <button class="tab active" data-filter="all" aria-selected="true">Tất cả</button>
+                    <button class="tab" data-filter="upcoming">Sắp diễn ra</button>
+                    <button class="tab" data-filter="ongoing">Đang diễn ra</button>
+                    <button class="tab" data-filter="ended">Đã kết thúc</button>
+                    <button class="tab" data-filter="cancelled">Đã hủy</button>
+                </div>
+
+                <div class="tools-right">
+                    <div class="search">
+                        <i class="fas fa-search"></i>
+                        <input id="tk-search" type="text" placeholder="Tìm theo tên sự kiện / mã vé / địa điểm…">
+                    </div>
+
+                    <div class="select">
+                        <i class="fas fa-sort-amount-down"></i>
+                        <select id="tk-sort">
+                            <option value="date_desc">Mới nhất</option>
+                            <option value="date_asc">Cũ nhất</option>
+                            <option value="name_asc">Tên A → Z</option>
+                            <option value="name_desc">Tên Z → A</option>
+                        </select>
+                    </div>
+
+                    <div class="view-switch" title="Chuyển kiểu hiển thị">
+                        <button class="view-btn active" data-view="grid"><i class="fas fa-grip"></i></button>
+                        <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid/List -->
+            <div id="tickets-grid" class="grid">
+
+                <!-- Ticket Card (mẫu 1 – Sắp diễn ra) -->
+                <article class="ticket-card" data-status="upcoming" data-start="2025-10-20T09:00"
+                    data-end="2025-10-20T17:00" data-order="ORD-8C42F1" data-seat="A12" data-price="350000"
+                    data-venue="Hội trường A, TP.HCM" data-name="Hội Thảo Công Nghệ AI">
+                    <div class="ticket-media">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop"
+                            alt="Hội Thảo Công Nghệ AI">
+                        <span class="badge is-upcoming">Sắp diễn ra</span>
+                    </div>
+                    <div class="ticket-body">
+                        <h3 class="title">Hội Thảo Công Nghệ AI</h3>
+                        <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range>20 Oct 2025, 09:00 -
+                                17:00</span></p>
+                        <p class="sub"><i class="fas fa-location-dot"></i> Hội trường A, TP.HCM</p>
+                        <div class="meta">
+                            <span class="code">ORD-8C42F1</span>
+                            <span class="seat">Ghế A12</span>
+                            <span class="price">350.000đ</span>
+                        </div>
+                    </div>
+                    <div class="ticket-actions">
+                        <button class="btn-view" onclick="viewTicketDetails('ORD-8C42F1')">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="btn-qr" onclick="showTicketQR('ORD-8C42F1')">
+                            <i class="fas fa-qrcode"></i> QR Code
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Ticket Card (mẫu 2 – Đã dùng) -->
+                <article class="ticket-card" data-status="used" data-start="2025-09-15T14:00"
+                    data-end="2025-09-15T18:00" data-order="ORD-7B31E2" data-seat="B05" data-price="250000"
+                    data-venue="Trung tâm Hội nghị, Hà Nội" data-name="Workshop Design Thinking">
+                    <div class="ticket-media">
+                        <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=1200&auto=format&fit=crop"
+                            alt="Workshop Design Thinking">
+                        <span class="badge is-used">Đã dùng</span>
+                    </div>
+                    <div class="ticket-body">
+                        <h3 class="title">Workshop Design Thinking</h3>
+                        <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range>15 Sep 2025, 14:00 -
+                                18:00</span></p>
+                        <p class="sub"><i class="fas fa-location-dot"></i> Trung tâm Hội nghị, Hà Nội</p>
+                        <div class="meta">
+                            <span class="code">ORD-7B31E2</span>
+                            <span class="seat">Ghế B05</span>
+                            <span class="price">250.000đ</span>
+                        </div>
+                    </div>
+                    <div class="ticket-actions">
+                        <button class="btn-view" onclick="viewTicketDetails('ORD-7B31E2')">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="btn-download" onclick="downloadTicket('ORD-7B31E2')">
+                            <i class="fas fa-download"></i> Tải vé
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Ticket Card (mẫu 3 – Đã hủy) -->
+                <article class="ticket-card" data-status="canceled" data-start="2025-10-05T10:00"
+                    data-end="2025-10-05T12:00" data-order="ORD-9D52A3" data-seat="C18" data-price="150000"
+                    data-venue="Khách sạn Hilton, TP.HCM" data-name="Meetup Startup Vietnam">
+                    <div class="ticket-media">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop"
+                            alt="Meetup Startup Vietnam">
+                        <span class="badge is-canceled">Đã hủy</span>
+                    </div>
+                    <div class="ticket-body">
+                        <h3 class="title">Meetup Startup Vietnam</h3>
+                        <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range>05 Oct 2025, 10:00 -
+                                12:00</span></p>
+                        <p class="sub"><i class="fas fa-location-dot"></i> Khách sạn Hilton, TP.HCM</p>
+                        <div class="meta">
+                            <span class="code">ORD-9D52A3</span>
+                            <span class="seat">Ghế C18</span>
+                            <span class="price">150.000đ</span>
+                        </div>
+                    </div>
+                    <div class="ticket-actions">
+                        <button class="btn-view" onclick="viewTicketDetails('ORD-9D52A3')">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        <button class="btn-refund" onclick="requestRefund('ORD-9D52A3')" disabled>
+                            <i class="fas fa-ban"></i> Đã hủy
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Ticket Detail Modal -->
+        <div id="ticketDetailModal" class="ticket-modal">
+            <div class="ticket-modal-overlay" onclick="closeTicketDetail()"></div>
+            <div class="ticket-modal-content">
+                <button class="ticket-modal-close" onclick="closeTicketDetail()">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="ticket-detail-header">
+                    <h2 id="modal-event-name">Hội Thảo Công Nghệ AI</h2>
+                    <span id="modal-status-badge" class="badge is-upcoming">Sắp diễn ra</span>
+                </div>
+
+                <div class="ticket-detail-body">
+                    <!-- QR Code Section -->
+                    <div class="qr-section">
+                        <div class="qr-code-wrapper">
+                            <div id="modal-qrcode"></div>
+                        </div>
+                        <p class="qr-instruction">Xuất trình mã QR này tại cổng check-in</p>
+                        <div class="qr-actions">
+                            <button class="btn-download-qr" onclick="downloadModalQR()">
+                                <i class="fas fa-download"></i> Tải QR
+                            </button>
+                            <button class="btn-print-qr" onclick="printModalQR()">
+                                <i class="fas fa-print"></i> In QR
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Info Section -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-ticket-alt"></i> Thông tin vé</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Mã đơn hàng</span>
+                                <span class="info-value" id="modal-order-id">ORD-8C42F1</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">loại Ghế</span>
+                                <span class="info-value" id="modal-seat">A12</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Giá vé</span>
+                                <span class="info-value" id="modal-price">350.000đ</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Trạng thái</span>
+                                <span class="info-value" id="modal-ticket-status">Đã xác nhận</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Info Section -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-calendar-alt"></i> Thông tin sự kiện</h3>
+                        <div class="info-list">
+                            <div class="info-row">
+                                <i class="fas fa-calendar"></i>
+                                <div>
+                                    <span class="info-label">Ngày giờ</span>
+                                    <span class="info-value" id="modal-datetime">20 Oct 2025, 09:00 - 17:00</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-location-dot"></i>
+                                <div>
+                                    <span class="info-label">Địa điểm</span>
+                                    <span class="info-value" id="modal-venue">Hội trường A, TP.HCM</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-user"></i>
+                                <div>
+                                    <span class="info-label">Người tham dự</span>
+                                    <span class="info-value" id="modal-attendee">Nguyễn Văn A</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <span class="info-label">Email</span>
+                                    <span class="info-value" id="modal-email">user@example.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <span class="info-label">Số điện thoại</span>
+                            <span class="info-value" id="modal-phone">—</span>
+                        </div>
+                    </div>
+                    <!-- Additional Info -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-info-circle"></i> Lưu ý</h3>
+                        <ul class="notes-list">
+                            <li>Vui lòng đến trước giờ diễn ra sự kiện 15-30 phút</li>
+                            <li>Mang theo giấy tờ tùy thân để đối chiếu thông tin</li>
+                            <li>QR code chỉ sử dụng một lần, không chia sẻ cho người khác</li>
+                            <li>Liên hệ ban tổ chức nếu có bất kỳ thắc mắc nào</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ticket-modal-footer">
+                    <button class="btn-secondary" onclick="closeTicketDetail()">
+                        Đóng
+                    </button>
+                    <button class="btn-primary" onclick="downloadTicketPDF()">
+                        <i class="fas fa-file-pdf"></i> Tải vé PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <style>
+            .modal-ticket {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, .4);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
+
+            .modal-content-ticket {
+                background: #fff;
+                padding: 25px;
+                width: 450px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                animation: fade .2s;
+            }
+
+            .close {
+                float: right;
+                font-size: 28px;
+                cursor: pointer;
+            }
+        </style>
+
+        <!-- MODAL QR CHECK-IN -->
+        <div id="qrModal" class="modal-ticket" style="display: none;">
+            <div class="modal-content-ticket qr-card">
+
+                <!-- nút đóng -->
+                <span class="close" onclick="closeQR()">&times;</span>
+
+                <!-- tiêu đề -->
+                <h2 class="qr-title">QR Code Check-in</h2>
+
+                <!-- khung QR -->
+                <div class="qr-card-body">
+                    <div id="qrcode" class="qr-image"></div>
+
+                    <p class="qr-meta">
+                        Tạo lúc: <span id="qrCreatedTime">--:--:--</span>
+                    </p>
+                    <p class="qr-meta">
+                        Ngày tạo: <span id="qrCreatedDate">--/--/----</span>
+                    </p>
+                </div>
+
+                <!-- thông tin vé -->
+                <div class="qr-info">
+                    <p><strong>Sự kiện:</strong>
+                        <span id="qrEventName">Tên sự kiện</span>
+                    </p>
+                    <p><strong>Mã QR:</strong>
+                        <span id="qrCodeText">---</span>
+                    </p>
+                </div>
+
+                <!-- nút thao tác -->
+                <div class="qr-actions">
+                    <button id="btnDownloadQR" class="btn btn-outline">
+                        Tải xuống
+                    </button>
+                    <button id="btnPrintQR" class="btn btn-primary">
+                        In QR Code
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+    <script src="../../js/core/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userData = initAuth('user');
+            if (!userData) return;
+        });
+    </script>
+    <script src="../../js/core/websocket.js"></script>
+    <script src="../../js/core/notifications.js"></script>
+    <script src="../../js/user/simple-qr.js"></script>
+    <!-- <script src="../../js/admin/dashboard.js"></script> -->
+    <script src="../../js/user/qr-checkin.js"></script>
+    <script src="../../js/admin/feedback.js" defer></script>
+    <script src="../../js/user/suggest-events.js"></script>
+    <script src="../../js/user/my-tickets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</body>
+
+</html>

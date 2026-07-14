@@ -1,0 +1,39 @@
+[
+  {
+    "feedbackId": 1,
+    "eventId": 1,
+    "userId": 1,
+    "userName": "Nguyễn Văn A",
+    "rating": 5,
+    "comment": "Sự kiện rất hay và bổ ích!",
+    "createdAt": "2024-01-16T10:00:00",
+    "organizerReply": "Cảm ơn bạn đã tham gia!",
+    "organizerReplyAt": "2024-01-16T14:00:00",
+    "eventTitle": "Hội thảo công nghệ 2024"
+  },
+  {
+    "feedbackId": 2,
+    "eventId": 1,
+    "userId": 2,
+    "userName": "Trần Thị B",
+    "rating": 4,
+    "comment": "Nội dung tốt nhưng cần cải thiện thời gian",
+    "createdAt": "2024-01-16T11:00:00",
+    "organizerReply": null,
+    "organizerReplyAt": null,
+    "eventTitle": "Hội thảo công nghệ 2024"
+  },
+  {
+    "feedbackId": 3,
+    "eventId": 1,
+    "userId": 3,
+    "userName": "Lê Văn C",
+    "rating": 5,
+    "comment": "Tuyệt vời!",
+    "createdAt": "2024-01-16T12:00:00",
+    "organizerReply": null,
+    "organizerReplyAt": null,
+    "eventTitle": "Hội thảo công nghệ 2024"
+  }
+]
+

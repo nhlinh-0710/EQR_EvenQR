@@ -1,0 +1,24 @@
+[
+  {
+    "eventId": 1,
+    "title": "Hội thảo công nghệ 2024",
+    "endTime": "2024-01-15T18:00:00",
+    "status": "COMPLETED",
+    "hasFeedback": false
+  },
+  {
+    "eventId": 2,
+    "title": "Workshop Marketing",
+    "endTime": "2024-01-20T17:00:00",
+    "status": "COMPLETED",
+    "hasFeedback": true
+  },
+  {
+    "eventId": 3,
+    "title": "Seminar Khởi nghiệp",
+    "endTime": "2024-01-25T16:00:00",
+    "status": "COMPLETED",
+    "hasFeedback": false
+  }
+]
+

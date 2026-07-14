@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hồ Sơ - EventQR</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/admin/dashboard.css" />
+  <link rel="stylesheet" href="../../css/placeholders.css" />
+  <link rel="stylesheet" href="../../css/user/qr-checkin.css" />
+  <link rel="stylesheet" href="../../css/user/suggest-events.css" />
+  <link rel="stylesheet" href="../../css/user/my-tickets.css" />
+  <link rel="stylesheet" href="../../css/user/my-events.css" />
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-calendar-alt"></i>
+            <span>EventQR</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <a href="index.html" class="menu-link">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="events.html" class="menu-link">
+            <i class="fas fa-calendar-check"></i>
+            <span>Sự Kiện của tôi</span>
+        </a>
+        <a href="create_event.html" class="menu-link">
+            <i class="fas fa-plus-circle"></i>
+            <span>Tạo Sự Kiện</span>
+        </a>
+    <a href="qr.html" class="menu-link">
+        <i class="fas fa-qrcode"></i>
+        <span>QR Check-in</span>
+    </a>
+    <a href="static.html" class="menu-link">
+            <i class="fas fa-chart-bar"></i>
+            <span>Thống Kê</span>
+        </a>
+        <a href="feedback.html" class="menu-link">
+            <i class="fas fa-comments"></i>
+            <span>Feedback</span>
+        </a>
+        <a href="profile.html" class="menu-link active">
+            <i class="fas fa-user-cog"></i>
+            <span>Hồ Sơ</span>
+        </a>
+    </div>
+    <div class="sidebar-footer">
+        <button class="logout-btn" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Đăng Xuất</span>
+        </button>
+    </div>
+</div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Mở/đóng menu trên di động">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 id="pageTitle">Hồ Sơ</h1>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Tìm kiếm sự kiện..." />
+        </div>
+        <div class="notifications">
+          <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()" aria-label="Thông báo">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notification-badge">0</span>
+          </button>
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notificationPanel">
+              <div class="notification-header">
+                  <h3>Thông báo</h3>
+                  <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                      Đánh dấu tất cả đã đọc
+                  </button>
+              </div>
+              <div class="notification-list" id="notificationList">
+                  <div class="notification-loading">Đang tải...</div>
+              </div>
+              <div class="notification-footer">
+                  <a href="#" onclick="viewAllNotifications()">Xem tất cả</a>
+              </div>
+          </div>
+        </div>
+        <div class="user-profile">
+          <div class="avatar-placeholder" id="userAvatar">U</div>
+          <span class="user-name" id="userName">Người dùng</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile Section -->
+    <section id="profile-section" class="content-section">
+      <div class="ap-wrap">
+        <!-- HERO -->
+        <div class="ap-hero">
+          <div class="ap-left">
+            <img loading="lazy" src="https://hoangphucphoto.com/wp-content/uploads/2023/07/anh-nhom-1.jpg"
+              alt="Avatar nhóm" class="ap-avatar" />
+          </div>
+          <div class="ap-right">
+    <h1 class="ap-name">NHÓM CỦA CHÚNG TÔI</h1>
+    <p class="ap-title">Software Engineer · Web Developer</p>
+    <p class="ap-about">
+      Tạo ra những sản phẩm web hiện đại, thân thiện, tối ưu trải nghiệm và mang lại giá trị thật cho doanh nghiệp.
+      Chúng tôi kết hợp <strong>kỹ thuật</strong> và <strong>tư duy sản phẩm</strong> để ship nhanh – chuẩn – bền.
+    </p>
+
+    <!-- ⭐ NÚT SỬA HỒ SƠ — CHỈ THÊM DÒNG NÀY ⭐ -->
+    <button class="edit-profile-btn"><i class="fas fa-edit"></i> Sửa hồ sơ</button>
+
+    <div class="ap-meta-badges">
+      <span class="badge">⚡ Agile</span>
+      <span class="badge">🔐 Bảo mật</span>
+      <span class="badge">📈 Hiệu năng</span>
+      <span class="badge">🧪 QA</span>
+    </div>
+
+    <div class="ap-socials" style="display:flex; gap:8px;">
+      <a href="https://www.facebook.com/share/1WBDuKs5wK/?mibextid=wwXIfr" target="_blank" rel="noopener"
+        aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://github.com/your-org" target="_blank" rel="noopener" aria-label="GitHub"><i
+          class="fab fa-github"></i></a>
+      <a href="mailto:Hoviethao@email.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+</div>
+
+
+        <!-- PROJECTS -->
+        <div class="ap-projects">
+          <h2 class="ap-h2">Dự án gần đây</h2>
+          <div class="ap-grid">
+            <article class="ap-card">
+              <div class="ap-card-cover">
+                <img loading="lazy"
+                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1600&auto=format&fit=crop"
+                  alt="EventHub Dashboard" />
+              </div>
+              <div class="ap-meta">
+                <h3>EventHub Dashboard</h3>
+                <p>Quản trị sự kiện · realtime · RBAC · audit log.</p>
+                <div class="ap-tags"><span>Next.js</span><span>Supabase</span><span>Shadcn</span></div>
+              </div>
+            </article>
+
+            <article class="ap-card">
+              <div class="ap-card-cover">
+                <img loading="lazy"
+                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop"
+                  alt="Smart Library" />
+              </div>
+              <div class="ap-meta">
+                <h3>Smart Library</h3>
+                <p>Mượn/trả, tìm kiếm nâng cao, log hoạt động.</p>
+                <div class="ap-tags"><span>NestJS</span><span>Postgres</span><span>Redis</span></div>
+              </div>
+            </article>
+
+            <article class="ap-card">
+              <div class="ap-card-cover">
+                <img loading="lazy"
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&auto=format&fit=crop"
+                  alt="ShopEase" />
+              </div>
+              <div class="ap-meta">
+                <h3>ShopEase</h3>
+                <p>E-commerce tối giản, thanh toán an toàn.</p>
+                <div class="ap-tags"><span>Next.js</span><span>Stripe</span><span>Prisma</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <!-- EDIT PROFILE MODAL -->
+<div id="profileEditModal" class="edit-modal">
+  <div class="edit-modal-content">
+    <h2>Sửa hồ sơ</h2>
+
+    <label>Ảnh đại diện</label>
+    <input type="file" id="editAvatar">
+
+    <label>Tiêu đề (Tên nhóm / Tên người dùng)</label>
+    <input type="text" id="editTitle">
+
+    <label>Chức danh</label>
+    <input type="text" id="editSubtitle">
+
+    <label>Mô tả</label>
+    <textarea id="editDescription"></textarea>
+
+    <label>Facebook URL</label>
+    <input type="text" id="editFacebook">
+
+    <label>GitHub URL</label>
+    <input type="text" id="editGithub">
+
+    <label>Email liên hệ</label>
+    <input type="email" id="editEmail">
+
+    <div class="modal-actions">
+      <button onclick="saveProfile()" class="save-btn">Lưu</button>
+      <button onclick="closeEditProfile()" class="close-btn">Hủy</button>
+    </div>
+  </div>
+</div>
+
+  <!-- WebSocket Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+  
+  <!-- JS dự án -->
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/websocket.js"></script>
+  <script src="../../js/admin/notifications.js"></script>
+  <script src="../../js/user/simple-qr.js" defer></script>
+  <script src="../../js/admin/dashboard.js" defer></script>
+  <script src="../../js/user/qr-checkin.js" defer></script>
+  <script src="../../js/admin/feedback.js" defer></script>
+  <script src="../../js/user/suggest-events.js" defer></script>
+  <script src="../../js/user/my-tickets.js" defer></script>
+  <!-- my-events.js không tồn tại, đã xóa reference -->
+
+  <!-- JS riêng cho trang Profile (fallback nhẹ) -->
+  <script src="../../js/admin/profile.js" defer></script>
+</body>
+
+</html>

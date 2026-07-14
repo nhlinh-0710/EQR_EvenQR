@@ -1,0 +1,33 @@
+[
+  {
+    "eventId": 1,
+    "title": "Hội thảo công nghệ",
+    "description": "Sự kiện về công nghệ mới nhất",
+    "startDate": "2024-01-15T10:00:00",
+    "endDate": "2024-01-15T18:00:00",
+    "location": "Hà Nội",
+    "attendees": 50,
+    "ticketsSold": 60
+  },
+  {
+    "eventId": 2,
+    "title": "Workshop design",
+    "description": "Workshop về thiết kế",
+    "startDate": "2024-01-22T09:00:00",
+    "endDate": "2024-01-22T17:00:00",
+    "location": "TP.HCM",
+    "attendees": 30,
+    "ticketsSold": 35
+  },
+  {
+    "eventId": 3,
+    "title": "Meetup startup",
+    "description": "Gặp gỡ các startup",
+    "startDate": "2024-01-30T14:00:00",
+    "endDate": "2024-01-30T18:00:00",
+    "location": "Đà Nẵng",
+    "attendees": 70,
+    "ticketsSold": 80
+  }
+]
+

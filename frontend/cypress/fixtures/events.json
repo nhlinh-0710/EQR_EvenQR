@@ -1,0 +1,39 @@
+[
+  {
+    "eventId": 1,
+    "title": "Hội thảo công nghệ",
+    "description": "Sự kiện về công nghệ mới nhất",
+    "startDate": "2024-12-15T10:00:00",
+    "endDate": "2024-12-15T18:00:00",
+    "location": "Hà Nội",
+    "category": "conference",
+    "maxParticipants": 100,
+    "status": "UPCOMING",
+    "organizerId": 1
+  },
+  {
+    "eventId": 2,
+    "title": "Workshop design",
+    "description": "Workshop về thiết kế",
+    "startDate": "2024-12-22T09:00:00",
+    "endDate": "2024-12-22T17:00:00",
+    "location": "TP.HCM",
+    "category": "workshop",
+    "maxParticipants": 50,
+    "status": "UPCOMING",
+    "organizerId": 1
+  },
+  {
+    "eventId": 3,
+    "title": "Meetup startup",
+    "description": "Gặp gỡ các startup",
+    "startDate": "2024-12-30T14:00:00",
+    "endDate": "2024-12-30T18:00:00",
+    "location": "Đà Nẵng",
+    "category": "meetup",
+    "maxParticipants": 80,
+    "status": "ONGOING",
+    "organizerId": 1
+  }
+]
+

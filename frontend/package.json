@@ -1,0 +1,19 @@
+{
+  "name": "eventqr-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EventQR Frontend - Hệ thống quản lý sự kiện thông minh",
+  "scripts": {
+    "start": "lite-server",
+    "dev": "lite-server",
+    "test:cypress": "cypress open",
+    "test:cypress:run": "cypress run"
+  },
+  "dependencies": {
+    "lite-server": "^2.6.1",
+    "axios": "^0.21.4"
+  },
+  "devDependencies": {
+    "cypress": "^15.7.1"
+  }
+}
