@@ -72,7 +72,7 @@ jobs:
           generate-summary: true
           jacoco-csv-file: backend/target/site/jacoco/jacoco.csv
           badges-directory: .github/badges
-          on-missing-report: warn
+          on-missing-report: fail
 
       - name: Upload coverage badge artifact
         if: steps.jacoco-badge.outcome == 'success'
