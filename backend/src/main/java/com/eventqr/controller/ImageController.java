@@ -20,7 +20,7 @@ public class ImageController {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg");
-    private static final Path BASE_DIR = Paths.get("uploads").toAbsolutePath().normalize();
+    private static Path BASE_DIR = Paths.get("uploads").toAbsolutePath().normalize();
 
     @GetMapping("/view")
     public ResponseEntity<Resource> getImage(@RequestParam String path) {
