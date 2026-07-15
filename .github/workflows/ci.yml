@@ -65,21 +65,24 @@ jobs:
 
       - name: Generate JaCoCo coverage badge
         id: jacoco-badge
+        continue-on-error: true
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
           generate-summary: true
           jacoco-csv-file: backend/target/site/jacoco/jacoco.csv
           badges-directory: .github/badges
+          on-missing-report: warn
 
       - name: Upload coverage badge artifact
+        if: steps.jacoco-badge.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-badges
           path: .github/badges/
 
       - name: Comment coverage on PR
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && steps.jacoco-badge.outcome == 'success' }}
         uses: actions/github-script@v7
         with:
           script: |
