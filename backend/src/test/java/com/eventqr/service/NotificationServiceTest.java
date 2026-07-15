@@ -91,28 +91,28 @@ class NotificationServiceTest {
     void sendToOrganizer_nullOrganizerId() {
         notificationService.sendToOrganizer(null, 1L, "title", "user");
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendToOrganizer_nullEventId() {
         notificationService.sendToOrganizer(1L, null, "title", "user");
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendToOrganizer_nullEventTitle() {
         notificationService.sendToOrganizer(1L, 1L, null, "user");
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendToOrganizer_nullUserName() {
         notificationService.sendToOrganizer(1L, 1L, "title", null);
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
@@ -121,13 +121,13 @@ class NotificationServiceTest {
 
         notificationService.sendToOrganizer(1L, 1L, "title", "user");
 
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendToOrganizer_convertAndSendThrowsException() {
         when(notificationRepository.save(any(Notification.class))).thenReturn(savedNotification);
-        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(any(), any());
+        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
         notificationService.sendToOrganizer(1L, 1L, "title", "user");
 
@@ -263,13 +263,13 @@ class NotificationServiceTest {
 
         notificationService.sendFeedbackNotificationToOrganizer(1L, 1L, "title", "user", 5);
 
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendFeedbackNotificationToOrganizer_convertAndSendThrowsException() {
         when(notificationRepository.save(any(Notification.class))).thenReturn(savedNotification);
-        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(any(), any());
+        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
         notificationService.sendFeedbackNotificationToOrganizer(1L, 1L, "title", "user", 5);
 
@@ -334,13 +334,13 @@ class NotificationServiceTest {
 
         notificationService.sendFeedbackReplyNotificationToUser(1L, 1L, "title", "reply");
 
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
     void sendFeedbackReplyNotificationToUser_convertAndSendThrowsException() {
         when(notificationRepository.save(any(Notification.class))).thenReturn(savedNotification);
-        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(any(), any());
+        doThrow(new RuntimeException("WS error")).when(messagingTemplate).convertAndSend(anyString(), any(Object.class));
 
         notificationService.sendFeedbackReplyNotificationToUser(1L, 1L, "title", "reply");
 
@@ -384,7 +384,7 @@ class NotificationServiceTest {
         notificationService.sendEventStartSoonNotification(1L, 1L, "TestEvent", LocalDateTime.now());
 
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
@@ -428,7 +428,7 @@ class NotificationServiceTest {
         notificationService.sendEventEndedNotification(1L, 1L, "TestEvent");
 
         verify(notificationRepository, never()).save(any());
-        verify(messagingTemplate, never()).convertAndSend(any(), any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
