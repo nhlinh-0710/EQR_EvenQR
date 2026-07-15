@@ -91,7 +91,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_success() {
+    void checkIn_success() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.of(ticket));
         when(eventRepo.findById(eventId)).thenReturn(Optional.of(event));
@@ -115,7 +115,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_ticketNotFound() {
+    void checkIn_ticketNotFound() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.empty());
 
@@ -128,7 +128,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_eventNotFound() {
+    void checkIn_eventNotFound() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.of(ticket));
         when(eventRepo.findById(eventId)).thenReturn(Optional.empty());
@@ -141,7 +141,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_ticketNotBelongToEvent() {
+    void checkIn_ticketNotBelongToEvent() throws Exception {
         ticket.setEventId(999L);
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.of(ticket));
@@ -155,7 +155,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_userNotFound() {
+    void checkIn_userNotFound() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.of(ticket));
         when(eventRepo.findById(eventId)).thenReturn(Optional.of(event));
@@ -169,7 +169,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_alreadyCheckedIn() {
+    void checkIn_alreadyCheckedIn() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenReturn(payload);
         when(ticketRepo.findById(ticketId)).thenReturn(Optional.of(ticket));
         when(eventRepo.findById(eventId)).thenReturn(Optional.of(event));
@@ -184,7 +184,7 @@ class CheckInControllerTest {
     }
 
     @Test
-    void checkIn_genericException() {
+    void checkIn_genericException() throws Exception {
         when(mapper.readValue(anyString(), eq(QrCheckinPayload.class))).thenThrow(new RuntimeException("Lỗi hệ thống!"));
 
         ResponseEntity<?> response = controller.checkIn(validBase64Payload);
