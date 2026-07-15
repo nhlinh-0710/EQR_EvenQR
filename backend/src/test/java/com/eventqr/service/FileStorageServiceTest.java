@@ -28,6 +28,9 @@ class FileStorageServiceTest {
         Field uploadPathField = FileStorageService.class.getDeclaredField("uploadPath");
         uploadPathField.setAccessible(true);
         uploadPathField.set(fileStorageService, tempDir);
+        Field uploadDirField = FileStorageService.class.getDeclaredField("uploadDir");
+        uploadDirField.setAccessible(true);
+        uploadDirField.set(fileStorageService, tempDir.toString());
     }
 
     @AfterEach
@@ -41,13 +44,10 @@ class FileStorageServiceTest {
     void init_whenDirectoryDoesNotExist_shouldCreateIt() throws Exception {
         Path newDir = tempDir.resolve("new_upload_dir");
         FileStorageService service = new FileStorageService();
-        Field uploadPathField = FileStorageService.class.getDeclaredField("uploadPath");
-        uploadPathField.setAccessible(true);
+        Field uploadDirField = FileStorageService.class.getDeclaredField("uploadDir");
+        uploadDirField.setAccessible(true);
+        uploadDirField.set(service, newDir.toString());
 
-        service.init();
-        assertFalse(Files.exists(newDir));
-
-        uploadPathField.set(service, newDir);
         service.init();
         assertTrue(Files.exists(newDir));
     }
