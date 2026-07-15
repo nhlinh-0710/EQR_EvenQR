@@ -101,10 +101,9 @@ describe('Authentication Frontend Tests - Linh (20 Test Cases)', () => {
     cy.get('#registerForm').submit();
     cy.wait('@registerSuccess');
     // Kiểm tra modal đóng (thành công) hoặc body có chứa thông báo thành công
-    cy.get('body').then(($body) => {
-      const modalVisible = $body.find('#registerModal:visible').length > 0;
-      const hasSuccessText = $body.text().includes('thành công');
-      expect(modalVisible || hasSuccessText).to.be.true;
+    cy.get('body', { timeout: 3000 }).should('satisfy', ($body) => {
+      return $body.find('#registerModal:visible').length === 0 ||
+             $body.text().includes('thành công');
     });
   });
 
