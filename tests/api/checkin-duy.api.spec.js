@@ -45,7 +45,7 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
 
   // TC04: GET /api/checkin-by-code - Check-in thành công với mã QR
   test('TC04: GET /api/checkin-by-code - Check-in thành công với mã QR hợp lệ', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/checkin-by-code?code=#1-E1-U1`);
+    const response = await request.get(`${BASE_URL}/checkin-by-code?code=${encodeURIComponent('#1-E1-U1')}`);
     
     // Có thể thành công hoặc lỗi nếu ticket không tồn tại
     expect([200, 400]).toContain(response.status());
@@ -63,7 +63,7 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
 
   // TC06: GET /api/checkin-by-code - Vé không tồn tại
   test('TC06: GET /api/checkin-by-code - Trả về lỗi khi vé không tồn tại', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/checkin-by-code?code=#99999-E1-U1`);
+    const response = await request.get(`${BASE_URL}/checkin-by-code?code=${encodeURIComponent('#99999-E1-U1')}`);
     
     expect(response.status()).toBe(400);
     const body = await response.json();
@@ -72,7 +72,7 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
 
   // TC07: GET /api/checkin-by-code - Sự kiện không tồn tại
   test('TC07: GET /api/checkin-by-code - Trả về lỗi khi sự kiện không tồn tại', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/checkin-by-code?code=#1-E99999-U1`);
+    const response = await request.get(`${BASE_URL}/checkin-by-code?code=${encodeURIComponent('#1-E99999-U1')}`);
     
     expect(response.status()).toBe(400);
     const body = await response.json();
@@ -81,7 +81,7 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
 
   // TC08: GET /api/checkin-by-code - User không tồn tại
   test('TC08: GET /api/checkin-by-code - Trả về lỗi khi user không tồn tại', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/checkin-by-code?code=#1-E1-U99999`);
+    const response = await request.get(`${BASE_URL}/checkin-by-code?code=${encodeURIComponent('#1-E1-U99999')}`);
     
     expect(response.status()).toBe(400);
     const body = await response.json();
@@ -91,7 +91,7 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
   // TC09: GET /api/checkin-by-code - Vé đã check-in rồi
   test('TC09: GET /api/checkin-by-code - Trả về lỗi khi vé đã check-in', async ({ request }) => {
     // Giả định vé 1 đã check-in
-    const response = await request.get(`${BASE_URL}/checkin-by-code?code=#1-E1-U1`);
+    const response = await request.get(`${BASE_URL}/checkin-by-code?code=${encodeURIComponent('#1-E1-U1')}`);
     
     // Nếu đã check-in, sẽ trả về lỗi
     if (response.status() === 400) {
@@ -172,7 +172,11 @@ test.describe('QR Check-in Backend API Tests - Duy (20 Test Cases)', () => {
 
   // TC16: CORS headers đúng
   test('TC16: Response có CORS headers cho phép cross-origin', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/checkin-history?organizerId=1`);
+    const response = await request.get(`${BASE_URL}/checkin-history?organizerId=1`, {
+      headers: {
+        'Origin': 'http://localhost:5500'
+      }
+    });
     
     const headers = response.headers();
     expect(headers['access-control-allow-origin'] || headers['Access-Control-Allow-Origin']).toBeDefined();

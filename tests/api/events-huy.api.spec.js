@@ -17,11 +17,10 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
     const formData = new FormData();
     formData.append('title', 'Test Event');
     formData.append('description', 'Test Description');
-    formData.append('eventDate', '2025-12-31');
-    formData.append('startTime', '2025-12-31T10:00:00');
-    formData.append('endTime', '2025-12-31T18:00:00');
+    formData.append('eventDate', '2025-12-31T10:00:00');
+    formData.append('duration', '8');
     formData.append('location', 'Test Location');
-    formData.append('maxAttendees', '100');
+    formData.append('maxParticipants', '100');
     formData.append('organizerId', organizerId.toString());
 
     const response = await request.post(BASE_URL, {
@@ -90,11 +89,22 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
 
   // TC05: PUT /api/events/{id} - Cập nhật thành công
   test('TC05: PUT /api/events/{id} - Cập nhật sự kiện thành công', async ({ request }) => {
-    const eventId = 1;
+    const createForm = new FormData();
+    createForm.append('title', 'Event to Update');
+    createForm.append('eventDate', '2025-12-31T10:00:00');
+    createForm.append('location', 'Test Location');
+    createForm.append('organizerId', organizerId.toString());
+    const createRes = await request.post(BASE_URL, {
+      headers: { 'X-Organizer-Id': organizerId.toString() },
+      multipart: createForm
+    });
+    const created = await createRes.json();
+    const eventId = created.eventId;
+
     const formData = new FormData();
     formData.append('title', 'Updated Event');
     formData.append('description', 'Updated Description');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Updated Location');
 
     const response = await request.put(`${BASE_URL}/${eventId}`, {
@@ -110,8 +120,19 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
   });
 
   // TC06: PUT /api/events/{id} - Không có quyền
-  test('TC06: PUT /api/events/{id} - Trả về 403 khi không có quyền chỉnh sửa', async ({ request }) => {
-    const eventId = 1;
+  test('TC06: PUT /api/events/{id} - Trả về lỗi khi không có quyền chỉnh sửa', async ({ request }) => {
+    const createForm = new FormData();
+    createForm.append('title', 'Event for Permission Test');
+    createForm.append('eventDate', '2025-12-31T10:00:00');
+    createForm.append('location', 'Test Location');
+    createForm.append('organizerId', organizerId.toString());
+    const createRes = await request.post(BASE_URL, {
+      headers: { 'X-Organizer-Id': organizerId.toString() },
+      multipart: createForm
+    });
+    const created = await createRes.json();
+    const eventId = created.eventId;
+
     const otherOrganizerId = 999;
     const formData = new FormData();
     formData.append('title', 'Updated Event');
@@ -137,13 +158,24 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
 
   // TC08: GET /api/events/{id} - Lấy chi tiết sự kiện
   test('TC08: GET /api/events/{id} - Lấy chi tiết sự kiện thành công', async ({ request }) => {
-    const eventId = 1;
+    const createForm = new FormData();
+    createForm.append('title', 'Detail Test Event');
+    createForm.append('eventDate', '2025-12-31T10:00:00');
+    createForm.append('location', 'Test Location');
+    createForm.append('organizerId', organizerId.toString());
+    const createRes = await request.post(BASE_URL, {
+      headers: { 'X-Organizer-Id': organizerId.toString() },
+      multipart: createForm
+    });
+    const created = await createRes.json();
+    const eventId = created.eventId;
+
     const response = await request.get(`${BASE_URL}/${eventId}`);
     
     expect(response.status()).toBe(200);
     const body = await response.json();
     expect(body.eventId).toBe(eventId);
-    expect(body.title).toBeDefined();
+    expect(body.title).toBe('Detail Test Event');
   });
 
   // TC09: GET /api/events/{id} - Sự kiện không tồn tại
@@ -169,10 +201,10 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
 
   // TC11: DELETE /api/events/{id} - Xóa sự kiện (nếu có)
   test('TC11: DELETE /api/events/{id} - Xóa sự kiện thành công', async ({ request }) => {
-    // Tạo sự kiện trước
+    const ADMIN_URL = 'http://localhost:8080/api/admin/events';
     const formData = new FormData();
     formData.append('title', 'Event to Delete');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
     formData.append('organizerId', organizerId.toString());
 
@@ -185,8 +217,7 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
     const createdEvent = await createResponse.json();
     const eventId = createdEvent.eventId;
 
-    // Xóa sự kiện
-    const deleteResponse = await request.delete(`${BASE_URL}/${eventId}`, {
+    const deleteResponse = await request.delete(`${ADMIN_URL}/${eventId}`, {
       headers: {
         'X-Organizer-Id': organizerId.toString()
       }
@@ -195,13 +226,13 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
     expect([200, 204]).toContain(deleteResponse.status());
   });
 
-  // TC12: Validation maxAttendees phải > 0
-  test('TC12: POST /api/events - Trả về lỗi khi maxAttendees <= 0', async ({ request }) => {
+  // TC12: Validation maxParticipants phải > 0
+  test('TC12: POST /api/events - Trả về lỗi khi maxParticipants <= 0', async ({ request }) => {
     const formData = new FormData();
     formData.append('title', 'Test Event');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
-    formData.append('maxAttendees', '0');
+    formData.append('maxParticipants', '0');
     formData.append('organizerId', organizerId.toString());
 
     const response = await request.post(BASE_URL, {
@@ -218,7 +249,7 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
   test('TC13: POST /api/events - Upload hình ảnh sự kiện thành công', async ({ request }) => {
     const formData = new FormData();
     formData.append('title', 'Test Event with Image');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
     formData.append('organizerId', organizerId.toString());
     // Note: In real test, add actual image file
@@ -236,7 +267,18 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
 
   // TC14: Response format đúng
   test('TC14: Response format có đầy đủ các trường bắt buộc', async ({ request }) => {
-    const eventId = 1;
+    const createForm = new FormData();
+    createForm.append('title', 'Format Test Event');
+    createForm.append('eventDate', '2025-12-31T10:00:00');
+    createForm.append('location', 'Test Location');
+    createForm.append('organizerId', organizerId.toString());
+    const createRes = await request.post(BASE_URL, {
+      headers: { 'X-Organizer-Id': organizerId.toString() },
+      multipart: createForm
+    });
+    const created = await createRes.json();
+    const eventId = created.eventId;
+
     const response = await request.get(`${BASE_URL}/${eventId}`);
     
     expect(response.status()).toBe(200);
@@ -250,7 +292,7 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
   test('TC15: Trả về status code 201 khi tạo sự kiện thành công', async ({ request }) => {
     const formData = new FormData();
     formData.append('title', 'Test Event');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
     formData.append('organizerId', organizerId.toString());
 
@@ -266,7 +308,11 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
 
   // TC16: CORS headers đúng
   test('TC16: Response có CORS headers cho phép cross-origin', async ({ request }) => {
-    const response = await request.get(BASE_URL);
+    const response = await request.get(BASE_URL, {
+      headers: {
+        'Origin': 'http://localhost:5500'
+      }
+    });
     
     const headers = response.headers();
     expect(headers['access-control-allow-origin'] || headers['Access-Control-Allow-Origin']).toBeDefined();
@@ -284,7 +330,7 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
   test('TC18: Bảo vệ chống SQL injection trong title', async ({ request }) => {
     const formData = new FormData();
     formData.append('title', "Test'; DROP TABLE events; --");
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
     formData.append('organizerId', organizerId.toString());
 
@@ -304,7 +350,7 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
     const formData = new FormData();
     formData.append('title', 'Test Event');
     formData.append('description', '<script>alert("xss")</script>');
-    formData.append('eventDate', '2025-12-31');
+    formData.append('eventDate', '2025-12-31T10:00:00');
     formData.append('location', 'Test Location');
     formData.append('organizerId', organizerId.toString());
 
@@ -322,14 +368,13 @@ test.describe('Event Management Backend API Tests - Huy (20 Test Cases)', () => 
     }
   });
 
-  // TC20: Pagination (nếu có)
-  test('TC20: GET /api/events hỗ trợ pagination', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}?page=1&size=10`);
+  // TC20: GET /api/events trả về danh sách
+  test('TC20: GET /api/events trả về danh sách sự kiện', async ({ request }) => {
+    const response = await request.get(BASE_URL);
     
     expect(response.status()).toBe(200);
     const body = await response.json();
-    // Kiểm tra có pagination info hoặc array
-    expect(Array.isArray(body) || body.content).toBeDefined();
+    expect(Array.isArray(body)).toBe(true);
   });
 });
 

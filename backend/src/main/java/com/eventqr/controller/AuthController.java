@@ -3,7 +3,6 @@ package com.eventqr.controller;
 import com.eventqr.model.Account;
 import com.eventqr.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class AuthController {
         }
         response.put("success", false);
         response.put("message", "Sai email hoặc mật khẩu");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/forgot")

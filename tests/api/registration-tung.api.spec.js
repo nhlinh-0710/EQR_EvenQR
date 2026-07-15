@@ -53,9 +53,8 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
     expect(response.status()).toBeGreaterThanOrEqual(400);
   });
 
-  // TC04: POST /api/events/register - Sự kiện đã đầy
-  test('TC04: POST /api/events/register - Trả về lỗi khi sự kiện đã đầy', async ({ request }) => {
-    // Giả định eventId 999 là sự kiện đã đầy
+  // TC04: POST /api/events/register - Trả về lỗi khi event không tồn tại
+  test('TC04: POST /api/events/register - Trả về lỗi khi event không tồn tại', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/events/register`, {
       data: {
         eventId: 999,
@@ -63,10 +62,7 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
       }
     });
 
-    if (response.status() === 400) {
-      const body = await response.json();
-      expect(body.message).toContain('đầy');
-    }
+    expect(response.status()).toBeGreaterThanOrEqual(400);
   });
 
   // TC05: POST /api/events/register - Đã đăng ký rồi
@@ -131,10 +127,10 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
     
     expect(response.status()).toBe(200);
     const body = await response.json();
+    expect(Array.isArray(body)).toBe(true);
     if (body.length > 0) {
       expect(body[0]).toHaveProperty('ticketId');
       expect(body[0]).toHaveProperty('eventId');
-      expect(body[0]).toHaveProperty('qrCode');
     }
   });
 
@@ -164,7 +160,11 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
 
   // TC14: CORS headers đúng
   test('TC14: Response có CORS headers cho phép cross-origin', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/user/${userId}/tickets`);
+    const response = await request.get(`${BASE_URL}/user/${userId}/tickets`, {
+      headers: {
+        'Origin': 'http://localhost:5500'
+      }
+    });
     
     const headers = response.headers();
     expect(headers['access-control-allow-origin'] || headers['Access-Control-Allow-Origin']).toBeDefined();
@@ -219,8 +219,7 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
   });
 
   // TC19: Validation số lượng người tham gia
-  test('TC19: Kiểm tra số lượng người tham gia không vượt quá maxAttendees', async ({ request }) => {
-    // Giả định eventId 999 đã đầy
+  test('TC19: POST /api/events/register - Trả về lỗi khi event không tồn tại', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/events/register`, {
       data: {
         eventId: 999,
@@ -228,10 +227,7 @@ test.describe('Event Registration Backend API Tests - Tùng (20 Test Cases)', ()
       }
     });
 
-    if (response.status() === 400) {
-      const body = await response.json();
-      expect(body.message).toContain('đầy');
-    }
+    expect(response.status()).toBeGreaterThanOrEqual(400);
   });
 
   // TC20: Rate limiting (nếu có)

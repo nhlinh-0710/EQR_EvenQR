@@ -144,7 +144,11 @@ test.describe('Dashboard Backend API Tests - Kiệt (20 Test Cases)', () => {
 
   // TC14: CORS headers đúng
   test('TC14: Response có CORS headers cho phép cross-origin', async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/statistics`);
+    const response = await request.get(`${BASE_URL}/statistics`, {
+      headers: {
+        'Origin': 'http://localhost:5500'
+      }
+    });
     
     const headers = response.headers();
     expect(headers['access-control-allow-origin'] || headers['Access-Control-Allow-Origin']).toBeDefined();
